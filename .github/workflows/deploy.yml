@@ -1,0 +1,69 @@
+name: Deploy to Railway
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-flowark-solo:
+    name: Deploy FlowArk Solo
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy FlowArk Solo to Railway
+        run: railway up --service flowark-solo
+        working-directory: apps/flowark-solo
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Notify deployment
+        if: success()
+        run: |
+          echo "FlowArk Solo deployed successfully at $(date)"
+
+  deploy-revenue-os:
+    name: Deploy Revenue OS
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [deploy-flowark-solo]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy Revenue OS to Railway
+        run: railway up --service revenue-os
+        working-directory: apps/revenue-os
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Notify deployment
+        if: success()
+        run: |
+          echo "Revenue OS deployed successfully at $(date)"
+
+  post-deploy:
+    name: Post-Deploy Checks
+    runs-on: ubuntu-latest
+    needs: [deploy-flowark-solo, deploy-revenue-os]
+    steps:
+      - name: Health check FlowArk Solo
+        run: |
+          sleep 30
+          curl -f ${{ secrets.FLOWARK_URL }}/api/health || exit 1
+
+      - name: Health check Revenue OS
+        run: |
+          curl -f ${{ secrets.REVENUE_OS_URL }}/api/health || exit 1
+
+      - name: Summary
+        run: |
+          echo "All services deployed and healthy!"
+          echo "FlowArk Solo: ${{ secrets.FLOWARK_URL }}"
+          echo "Revenue OS: ${{ secrets.REVENUE_OS_URL }}"
