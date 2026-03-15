@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.railway.app/services.json",
+  "project": "roadmap-ai",
+  "services": [
+    {
+      "name": "flowark-solo",
+      "source": {
+        "repo": "JarvisATeam/roadmap-ai",
+        "branch": "main",
+        "rootDirectory": "apps/flowark-solo"
+      },
+      "build": {
+        "buildCommand": "npm run build",
+        "startCommand": "npm start"
+      },
+      "deploy": {
+        "healthcheckPath": "/api/health",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 5
+      },
+      "variables": [
+        "DATABASE_URL",
+        "NEXTAUTH_URL",
+        "NEXTAUTH_SECRET",
+        "RESEND_API_KEY",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "name": "revenue-os",
+      "source": {
+        "repo": "JarvisATeam/roadmap-ai",
+        "branch": "main",
+        "rootDirectory": "apps/revenue-os"
+      },
+      "build": {
+        "buildCommand": "npm run build",
+        "startCommand": "npm start"
+      },
+      "deploy": {
+        "healthcheckPath": "/api/health",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 5
+      },
+      "variables": [
+        "DATABASE_URL",
+        "NEXTAUTH_URL",
+        "NEXTAUTH_SECRET",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "RAILWAY_API_TOKEN",
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "name": "postgres",
+      "type": "plugin",
+      "plugin": "postgresql",
+      "version": "15"
+    }
+  ]
+}
