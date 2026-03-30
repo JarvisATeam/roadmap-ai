@@ -1,6 +1,6 @@
 import click
 from roadmap.storage.db import init_db, get_session
-from roadmap.storage.models import Mission, Milestone, Step
+from roadmap.storage.models import Mission, Milestone, Step, CheckIn
 from datetime import datetime
 
 @click.group()
@@ -44,6 +44,44 @@ def milestone(mission_id, title, success):
     session.close()
 
 @cli.command()
+@click.argument('milestone_id')
+@click.argument('action')
+def step(milestone_id, action):
+    '''Add step to milestone'''
+    session = get_session()
+    step = Step(
+        milestone_id=milestone_id,
+        action=action
+    )
+    session.add(step)
+    session.commit()
+    click.echo(f"✅ Step added: {step.action}")
+    click.echo(f"   ID: {step.id}")
+    session.close()
+
+@cli.command()
+@click.argument('mission_id')
+@click.argument('summary')
+@click.option('--blockers', help='Current blockers')
+@click.option('--mood', type=click.Choice(['high', 'medium', 'low']), default='medium')
+def checkin(mission_id, summary, blockers, mood):
+    '''Log a check-in for mission'''
+    session = get_session()
+    checkin_entry = CheckIn(
+        mission_id=mission_id,
+        progress_summary=summary,
+        blockers_text=blockers,
+        mood=mood
+    )
+    session.add(checkin_entry)
+    session.commit()
+    click.echo(f"✅ Check-in logged")
+    click.echo(f"   Mood: {mood}")
+    if blockers:
+        click.echo(f"   Blockers: {blockers}")
+    session.close()
+
+@cli.command()
 def status():
     '''Show current status of all missions'''
     session = get_session()
@@ -63,6 +101,12 @@ def status():
             for ms in milestones:
                 status_icon = "✅" if ms.status == 'completed' else "🔄" if ms.status == 'in_progress' else "⏳"
                 click.echo(f"     {status_icon} {ms.title}")
+                
+                steps = session.query(Step).filter_by(milestone_id=ms.id).all()
+                if steps:
+                    for s in steps:
+                        step_icon = "✅" if s.status == 'done' else "🔄" if s.status == 'in_progress' else "☐"
+                        click.echo(f"        {step_icon} {s.action}")
     
     session.close()
 
