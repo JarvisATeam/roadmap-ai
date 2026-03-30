@@ -1,0 +1,18 @@
+[project]
+name = "roadmap-ai"
+version = "0.1.0"
+description = "Never lose the thread again - Continuity engine for projects"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1.0",
+    "sqlalchemy>=2.0.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+roadmap = "roadmap.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
