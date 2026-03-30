@@ -85,3 +85,24 @@ Not "AI with memory" — **continuity as primary design objective**.
 ## License
 
 MIT
+
+## 📤 Export & Reporting
+
+Export roadmap plans to multiple formats:
+
+```python
+from roadmap.core.export import ExportEngine
+
+engine = ExportEngine()
+
+# Export to Markdown
+engine.to_markdown(plan, output_path="roadmap.md")
+
+# Export to JSON
+engine.to_json(plan, output_path="roadmap.json")
+
+# Export to CSV
+engine.to_csv(plan, output_path="roadmap.csv")
+
+# Get summary statistics
+summary = engine.summary(plan)
