@@ -1,6 +1,7 @@
 import click
 from roadmap.storage.db import init_db, get_session
 from roadmap.storage.models import Mission, Milestone, Step, CheckIn
+from roadmap.core.recovery import RecoveryEngine
 from datetime import datetime
 
 @click.group()
@@ -60,6 +61,24 @@ def step(milestone_id, action):
     session.close()
 
 @cli.command()
+@click.argument('step_id')
+def done(step_id):
+    '''Mark step as done'''
+    session = get_session()
+    step = session.query(Step).filter_by(id=step_id).first()
+    
+    if not step:
+        click.echo("❌ Step not found")
+        session.close()
+        return
+    
+    step.status = 'done'
+    step.completed_at = datetime.utcnow()
+    session.commit()
+    click.echo(f"✅ Step completed: {step.action}")
+    session.close()
+
+@cli.command()
 @click.argument('mission_id')
 @click.argument('summary')
 @click.option('--blockers', help='Current blockers')
@@ -111,9 +130,23 @@ def status():
     session.close()
 
 @cli.command()
-def open():
+@click.argument('mission_id', required=False)
+def open(mission_id):
     '''Show re-entry brief (30-second context recovery)'''
-    click.echo("⚡ RE-ENTRY BRIEF (placeholder - full implementation in Phase 4)")
+    engine = RecoveryEngine()
+    
+    if mission_id:
+        brief = engine.generate_brief(mission_id)
+        if brief:
+            click.echo(engine.format_brief(brief))
+        else:
+            click.echo("❌ Mission not found")
+    else:
+        brief_text = engine.get_active_mission_brief()
+        if brief_text:
+            click.echo(brief_text)
+        else:
+            click.echo("No active missions. Create one with: roadmap create <title>")
 
 def main():
     cli()
