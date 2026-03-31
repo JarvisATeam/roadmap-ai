@@ -56,3 +56,6 @@ htmlcov/
 
 # roadmap.ai specific
 roadmap.db
+
+# Test plan files
+plan-*.json
