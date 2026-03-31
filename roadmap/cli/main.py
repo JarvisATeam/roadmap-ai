@@ -1,3 +1,4 @@
+import builtins
 import click
 from roadmap.storage.db import init_db, get_session
 from roadmap.storage.models import Mission, Milestone, Step, CheckIn
@@ -129,9 +130,9 @@ def status():
     
     session.close()
 
-@cli.command()
+@cli.command(name='open')
 @click.argument('mission_id', required=False)
-def open(mission_id):
+def open_brief(mission_id):
     '''Show re-entry brief (30-second context recovery)'''
     engine = RecoveryEngine()
     
@@ -148,8 +149,116 @@ def open(mission_id):
         else:
             click.echo("No active missions. Create one with: roadmap create <title>")
 
+@cli.command()
+@click.argument('mission_id')
+@click.option('--format', type=click.Choice(['markdown', 'json', 'csv', 'summary']), default='markdown')
+@click.option('--output', type=click.Path(), help='Output file (default: stdout)')
+def export(mission_id, format, output):
+    """Export mission plan in various formats"""
+    from roadmap.core.export import ExportEngine
+    
+    session = get_session()
+    mission = session.query(Mission).filter_by(id=mission_id).first()
+    
+    if not mission:
+        click.echo(f"❌ Mission not found: {mission_id}")
+        session.close()
+        return
+    
+    # Build plan dict
+    plan = {
+        "plan_id": mission.id,
+        "title": mission.title,
+        "milestones": []
+    }
+    
+    for ms in mission.milestones:
+        milestone = {
+            "id": ms.id,
+            "title": ms.title,
+            "success_criteria": ms.success_criteria,
+            "steps": []
+        }
+        for step in ms.steps:
+            milestone["steps"].append({
+                "id": step.id,
+                "action": step.action,
+                "status": step.status,
+                "completed_at": step.completed_at.isoformat() if step.completed_at else None
+            })
+        plan["milestones"].append(milestone)
+    
+    session.close()
+    
+    engine = ExportEngine()
+    
+    if format == 'markdown':
+        result = engine.to_markdown(plan)
+    elif format == 'json':
+        result = engine.to_json(plan)
+    elif format == 'csv':
+        result = engine.to_csv(plan)
+    elif format == 'summary':
+        result = engine.summary(plan)
+    
+    if output:
+        with builtins.open(output, 'w') as f:
+            f.write(result)
+        click.echo(f"✅ Exported to {output}")
+    else:
+        click.echo(result)
+
+@cli.command()
+@click.argument('file1')
+@click.argument('file2')
+def diff(file1, file2):
+    """Compare two JSON plan files"""
+    import json
+    from roadmap.core.plan_diff import PlanDiffEngine
+    
+    try:
+        with builtins.open(file1) as f1:
+            plan1 = json.load(f1)
+        with builtins.open(file2) as f2:
+            plan2 = json.load(f2)
+    except FileNotFoundError as e:
+        click.echo(f"❌ File not found: {e}")
+        return
+    except json.JSONDecodeError as e:
+        click.echo(f"❌ Invalid JSON: {e}")
+        return
+    
+    # Extract steps from plans
+    def extract_steps(plan):
+        steps = []
+        for ms in plan.get("milestones", []):
+            for step in ms.get("steps", []):
+                steps.append({
+                    "id": step.get("id", ""),
+                    "action": step.get("action", step.get("title", "")),
+                    "status": step.get("status", "unknown")
+                })
+        return steps
+    
+    engine = PlanDiffEngine()
+    result = engine.compute_diff(extract_steps(plan1), extract_steps(plan2))
+    
+    click.echo(f"\n📊 Plan Comparison")
+    click.echo(f"{'='*50}")
+    click.echo(f"✅ Completed: {len(result.completed)}")
+    click.echo(f"⏭  Skipped: {len(result.skipped)}")
+    click.echo(f"➕ Added: {len(result.added)}")
+    click.echo(f"⏰ Delayed: {len(result.delayed)}")
+    click.echo(f"🎯 On track: {len(result.on_track)}")
+    click.echo(f"📈 Drift score: {result.drift_score}")
+    
+    if result.has_drift:
+        click.echo(f"\n⚠️  Drift detected: {result.summary}")
+
+
 def main():
     cli()
+
 
 if __name__ == '__main__':
     main()
