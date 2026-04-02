@@ -27,6 +27,11 @@ try:
     from rich.panel import Panel
 except ImportError:
     from roadmap.cli.display_fallback import Console, Panel
+from roadmap.cli.mission_commands import (
+    add_mission_command,
+    list_missions_command,
+    add_step_command
+)
 
 console = Console()
 
@@ -208,6 +213,10 @@ main.add_command(smart_command)
 main.add_command(risks_command)
 main.add_command(value_command)
 main.add_command(forecast_command)
+# Mission commands (Phase 2)
+main.add_command(add_mission_command, "add-mission")
+main.add_command(list_missions_command, "list-missions")
+main.add_command(add_step_command, "add-step")
 
 
 cli = main

@@ -34,6 +34,8 @@ class Mission(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text)
     status = Column(String(20), default=MissionStatus.PLANNED.value)
+    revenue = Column(Integer, default=0)
+    mission_code = Column(String(20), nullable=True)
 
     created_at = Column(DateTime(timezone=True), default=utc_now)
     started_at = Column(DateTime(timezone=True), nullable=True)
@@ -67,6 +69,7 @@ class Step(Base):
     description = Column(Text, nullable=False)
     status = Column(String(20), default=StepStatus.TODO.value)
     priority = Column(Integer, default=3)
+    energy = Column(Integer, default=3)
     due_date = Column(DateTime(timezone=True), nullable=True)
     tags = Column(String(255), nullable=True)
     notes = Column(Text, nullable=True)

@@ -1,113 +1,109 @@
-"""Shared data helpers for ORION modules."""
-from __future__ import annotations
+"""Data helpers backed by the ORM."""
 
-from datetime import datetime
 from typing import Dict, List, Optional
 
-from roadmap.storage import db
-from roadmap.storage import models
+from roadmap.storage.db import get_session
+from roadmap.storage.models import Milestone, Mission, Step
 
 
-def _safe_iso(value: Optional[datetime]) -> Optional[str]:
-    if not value:
-        return None
-    return value.isoformat().replace("+00:00", "Z")
-
-
-def _energy_from_priority(priority: Optional[int]) -> int:
-    base = priority if priority is not None else 3
-    return max(1, min(10, base))
-
-
-def load_tasks() -> List[Dict]:
-    """Convert Step rows into dictionaries consumable by ORION modules."""
-    try:
-        db.init_db()
-    except Exception:
-        pass
-    try:
-        session = db.get_session()
-    except Exception:
-        return []
-    try:
-        steps = session.query(models.Step).all()
-        tasks: List[Dict] = []
-        for step in steps:
-            milestone = step.milestone
-            mission = milestone.mission if milestone else None
-            tasks.append(
-                {
-                    "id": step.id,
-                    "name": step.description,
-                    "mission_id": mission.id if mission else None,
-                    "mission_name": mission.title if mission else None,
-                    "status": step.status,
-                    "priority": step.priority or 0,
-                    "energy": _energy_from_priority(step.priority),
-                    "deadline": _safe_iso(step.due_date),
-                    "completed": step.status == "done",
-                    "completed_at": _safe_iso(step.completed_at),
-                    "blocked": step.status == "blocked",
-                    "blocker_ids": [b.id for b in step.blockers if b.status != "resolved"],
-                    "created_at": _safe_iso(step.created_at),
-                }
-            )
-        return tasks
-    except Exception:
-        return []
-    finally:
-        try:
-            session.close()
-        except Exception:
-            pass
+def _mission_code(mission: Mission) -> str:
+    return mission.mission_code or f"M-{mission.id[:8]}"
 
 
 def load_missions() -> List[Dict]:
-    """Return missions as dictionaries."""
+    """Return missions with revenue data."""
+    session = get_session()
     try:
-        db.init_db()
-    except Exception:
-        pass
+        missions = session.query(Mission).all()
+        return [
+            {
+                "id": mission.id,
+                "mission_code": _mission_code(mission),
+                "title": mission.title,
+                "status": mission.status,
+                "revenue": mission.revenue or 0,
+            }
+            for mission in missions
+        ]
+    finally:
+        session.close()
+
+
+def load_tasks() -> List[Dict]:
+    """Return steps enriched with mission data."""
+    session = get_session()
     try:
-        session = db.get_session()
-    except Exception:
-        return []
-    try:
-        missions: List[Dict] = []
-        for mission in session.query(models.Mission).all():
-            task_ids = []
-            for milestone in mission.milestones:
-                task_ids.extend(step.id for step in milestone.steps)
-            missions.append(
+        steps = (
+            session.query(Step)
+            .join(Milestone)
+            .join(Mission)
+            .all()
+        )
+        result: List[Dict] = []
+        for step in steps:
+            mission = step.milestone.mission
+            result.append(
                 {
-                    "id": mission.id,
-                    "name": mission.title,
-                    "status": mission.status,
-                    "revenue": getattr(mission, "revenue", 0) or 0,
-                    "task_ids": task_ids,
+                    "id": step.id,
+                    "name": step.description,
+                    "mission_id": mission.id,
+                    "mission_code": _mission_code(mission),
+                    "mission_name": mission.title,
+                    "energy": step.energy or 3,
+                    "priority": step.priority or 3,
+                    "status": step.status,
+                    "deadline": step.due_date.isoformat() if step.due_date else None,
+                    "completed": step.status == "done",
                 }
             )
-        return missions
-    except Exception:
-        return []
+        return result
     finally:
-        try:
-            session.close()
-        except Exception:
-            pass
-
-
-def find_task(identifier: str) -> Optional[Dict]:
-    """Return matching task dictionary using prefix matching."""
-    for task in load_tasks():
-        if task["id"] == identifier or task["id"].startswith(identifier):
-            return task
-    return None
+        session.close()
 
 
 def find_mission(identifier: str) -> Optional[Dict]:
-    """Return matching mission dictionary using prefix matching."""
-    for mission in load_missions():
-        if mission["id"] == identifier or mission["id"].startswith(identifier):
-            return mission
-    return None
+    session = get_session()
+    try:
+        mission = (
+            session.query(Mission)
+            .filter(
+                (Mission.mission_code == identifier)
+                | (Mission.id.like(f"{identifier}%"))
+            )
+            .first()
+        )
+        if not mission:
+            return None
+        return {
+            "id": mission.id,
+            "mission_code": _mission_code(mission),
+            "title": mission.title,
+            "revenue": mission.revenue or 0,
+        }
+    finally:
+        session.close()
+
+
+def find_task(identifier: str) -> Optional[Dict]:
+    session = get_session()
+    try:
+        step = (
+            session.query(Step)
+            .filter(Step.id.like(f"{identifier}%"))
+            .first()
+        )
+        if not step:
+            return None
+        mission = step.milestone.mission
+        return {
+            "id": step.id,
+            "name": step.description,
+            "mission_id": mission.id,
+            "mission_code": _mission_code(mission),
+            "mission_name": mission.title,
+            "energy": step.energy or 3,
+            "priority": step.priority or 3,
+            "status": step.status,
+        }
+    finally:
+        session.close()
