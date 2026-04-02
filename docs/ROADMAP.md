@@ -27,6 +27,14 @@ Phase 3.0  Dashboard integration      🔵 future
 
 ---
 
+## Phase 2.5 Pilot — Day 7 Status
+
+- Verdict: **GO WITH FIXES** — ORION recommendation accuracy ~78% on mission `M-e9f70c2e` (€4000).
+- Strengths: mission-aware `add-step` workflow with energy tagging feeds ORION scoring end-to-end.
+- Gaps before dashboards: deadline capture for urgency, short IDs/prefixes for `roadmap decide`, and batch `list-steps` data.
+
+---
+
 ## Phase 1.3 ✅ Complete
 
 **Commit:** `b7722e9`  
@@ -261,6 +269,55 @@ dashboard/orion_panel.py render /tmp/orion_next.json
 **Phase 3 state:** Dashboard surfaces ORION intelligence at a glance.
 
 **Value:** Operator sees risks/recommendations without leaving mission-control UI.
+
+### Real Operator Workflow (Pilot)
+
+```bash
+# Morning
+roadmap smart next
+roadmap risks
+roadmap list-decisions | tail -5
+
+# During work
+roadmap decide <step-id> "Tech: Switching dashboard transport to WebSockets"
+
+# End of day
+roadmap forecast M-e9f70c2e
+```
+
+**Top commands (7-day pilot):**
+1. `roadmap smart next` — 18 uses — prioritization heartbeat.
+2. `roadmap decide` — 12 uses — decision logging + ORION feedback.
+3. `roadmap add-step` — 9 uses — expanding the mission backlog with energy-tagged work.
+4. `roadmap risks` — 7 uses — blocker cascade scan every morning.
+5. `roadmap list-decisions` — 5 uses — re-entry context and daily review.
+
+**Validated revenue scale:**
+- €500  → hygiene / backup work (docs, small fixes)
+- €1000 → normal features / UX polish
+- €2000 → integration/API deliverables
+- €4000 → launch blockers (dashboard integration tasks)
+- €8000 → critical contractual / go-no-go work
+
+**Validated energy scale:**
+- 1–2 → quick scripts / status updates between meetings
+- 3–4 → normal development / 1–2 hour blocks
+- 5–7 → deep integrations / half-day focus
+- 8–10 → architecture / refactor / high-risk work (full day)
+
+**Critical dashboard panels (Phase 3 targets):**
+1. Smart Next Panel — show `roadmap smart next` with score + factors.
+2. Risk Summary Panel — show `roadmap risks --json` (blocked counts, warnings).
+3. Forecast Panel — show `roadmap forecast <mission>` (probability, completion date).
+4. Recent Decisions Panel — show latest 5 decision entries for context.
+5. Mission Progress Panel — show task count + total energy per mission.
+
+**Known gaps before dashboard build:**
+- `roadmap decide` needs short ID/prefix support (UUID logging is slow).
+- Deadlines/urgency need to flow into `add-step` and ORION scoring.
+- Need `roadmap list-steps --mission` (or equivalent) for batch data feeds to the UI.
+
+**Phase 3 readiness:** GO WITH FIXES — build dashboards after the above fixes land.
 
 ---
 

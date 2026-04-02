@@ -2,6 +2,12 @@
 
 ORION provides intelligent task prioritization, risk prediction, and revenue forecasting for roadmap-ai.
 
+## Pilot Status
+
+- Phase 2.5 production pilot verdict: **GO WITH FIXES** — ORION delivered ~78% correct recommendations.
+- Strength: revenue × energy scoring works on real mission `M-e9f70c2e` (€4000, 5 steps).
+- Gap: no deadline/urgency input yet, so overdue tasks are treated the same as normal ones.
+
 ## Components
 
 ```
@@ -521,6 +527,62 @@ roadmap value task_001      # Inspect value and delay cost
 roadmap list-blocks         # Clear stale blockers
 roadmap status --json | jq '.missions[].revenue'
 ```
+
+---
+
+## Real Operator Workflow (Pilot)
+
+```bash
+# Morning loop
+roadmap smart next
+roadmap risks
+roadmap list-decisions | tail -5
+
+# During work
+roadmap decide <step-id> "Tech: Switching dashboard transport to WebSockets"
+
+# End of day
+roadmap forecast M-e9f70c2e
+```
+
+**Top production commands (7 days):**
+1. `roadmap smart next` — 18 uses — prioritization heartbeat.
+2. `roadmap decide` — 12 uses — logging decisions + ORION feedback.
+3. `roadmap add-step` — 9 uses — adding energy-tagged tasks to missions.
+4. `roadmap risks` — 7 uses — blocker cascade scan.
+5. `roadmap list-decisions` — 5 uses — re-entry context.
+
+**Validated revenue scale:**
+- €500  → hygiene / backup work (docs, small fixes)
+- €1000 → normal features / UX polish
+- €2000 → integration/API deliverables
+- €4000 → launch blockers (dashboard integration tasks)
+- €8000 → critical contractual / go-no-go work
+
+**Validated energy scale:**
+- 1–2 → quick scripts / status updates between meetings
+- 3–4 → normal development / 1–2 hour blocks
+- 5–7 → deep integrations or code work / half-day focus
+- 8–10 → architecture / refactor / high-risk work / full-day
+
+## Critical Dashboard Panels (Phase 3 Targets)
+
+1. **Smart Next Panel** — show `roadmap smart next` with score + factors — so operators instantly know next action.
+2. **Risk Summary Panel** — show `roadmap risks --json` (blocked counts + warnings) — early warning on cascades.
+3. **Forecast Panel** — show `roadmap forecast <mission>` (probability, completion date) — stakeholder-facing delivery state.
+4. **Recent Decisions Panel** — show latest 5 `roadmap decide` entries — quick context when switching operators.
+5. **Mission Progress Panel** — show task count + total energy per mission — visualizes momentum and workload.
+
+## Known Gaps Before Dashboard Build
+
+- `roadmap decide` still expects full UUIDs; needs short ID/prefix support for fast logging.
+- ORION urgency ignores deadlines; need due-date capture in `add-step` and scoring.
+- Need a `roadmap list-steps --mission` (or similar) command to feed dashboards with batch task data.
+
+## Phase 3 Readiness
+
+- **Status:** GO WITH FIXES.
+- **Reason:** CLI + ORION are production-usable, but dashboards must wait for short IDs, deadline support, and mission task listing.
 
 ---
 

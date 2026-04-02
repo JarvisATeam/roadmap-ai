@@ -123,11 +123,39 @@ All commands support `--json` for machine-readable output.
 - **Phase 1.4**: Decision logging — 🟡 in progress
 - **Phase 2.0**: ORION intelligence — 🟡 planned
 
+### Pilot Status (Day 7)
+
+- Phase 2.5 production pilot: **GO WITH FIXES** (ORION ~78% accurate, ready for dashboards once small fixes land)
+- ORION working set: mission `M-e9f70c2e` (€4000) with 5 energy-tagged tasks
+- Main gap: deadlines/urgency not yet captured, so overdue tasks are treated equal
+
 ## Documentation
 
 - [ROADMAP.md](docs/ROADMAP.md) — Full project plan
 - [DECISIONS.md](docs/DECISIONS.md) — Decision log format
 - [ORION.md](docs/ORION.md) — Intelligence layer specification
+
+## Daily Workflow (Production Use)
+
+```bash
+# Morning standup
+roadmap smart next
+roadmap risks
+roadmap list-decisions | tail -5
+
+# During work
+roadmap decide <step-id> "Tech: Switching to WebSockets for dashboard latency"
+
+# End of day
+roadmap forecast M-e9f70c2e
+```
+
+Top commands from pilot (7 days):
+- `roadmap smart next` — 18 uses — primary prioritization loop
+- `roadmap decide` — 12 uses — decisions + ORION feedback
+- `roadmap add-step` — 9 uses — queueing mission work
+- `roadmap risks` — 7 uses — blocker cascade detection
+- `roadmap list-decisions` — 5 uses — re-entry context
 
 ## Troubleshooting
 
@@ -163,6 +191,21 @@ roadmap add-task mission_001 "Task" --energy 3
 pip install -e .
 pytest tests/ -v
 ```
+
+## Calibrated Scales (Pilot)
+
+**Revenue (what operators actually used):**
+- €500  → hygiene / backup work (docs, small fixes)
+- €1000 → normal features / UX polish
+- €2000 → important integrations / APIs
+- €4000 → launch blockers (dashboard integration)
+- €8000 → critical contractual deliverables / go-no-go work
+
+**Energy (self-reported effort):**
+- 1–2 → quick scripts / status updates between meetings
+- 3–4 → standard development (1–2 hour blocks)
+- 5–7 → deep code or integrations (half-day focus)
+- 8–10 → architecture / refactor / high-risk work (full-day uninterrupted)
 
 ## License
 
