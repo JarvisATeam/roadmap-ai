@@ -79,38 +79,3 @@ def complete_task(task_id, notes):
         console.print('\n' + '─' * 40)
         _show_next_task(session)
 
-
-@click.command('status')
-@click.option('--detailed', '-d', is_flag=True, help='Show task details')
-def show_status(detailed):
-    """Show mission and milestone status."""
-    from roadmap.cli.main import ensure_db, get_active_mission
-
-    ensure_db()
-    with get_session() as session:
-        mission = get_active_mission(session)
-        if not mission:
-            console.print("No active mission")
-            return
-        console.print(f"\n[bold cyan]Mission:[/bold cyan] {mission.title}")
-        if mission.created_at:
-            console.print(f"Started: {mission.created_at.strftime('%Y-%m-%d')}\n")
-        table = Table(title="Milestones")
-        table.add_column("Milestone", style="cyan")
-        table.add_column("Tasks", justify="right")
-        table.add_column("Done", justify="right")
-        table.add_column("Progress", justify="right")
-        for ms in mission.milestones:
-            total = len(ms.steps)
-            done = sum(1 for s in ms.steps if s.status == 'done')
-            pct = (done / total * 100) if total else 0
-            table.add_row(ms.title, str(total), str(done), f"{pct:.0f}%")
-        console.print(table)
-        if detailed:
-            console.print("\n[bold]Task Details:[/bold]")
-            for ms in mission.milestones:
-                console.print(f"\n[cyan]{ms.title}[/cyan]")
-                for step in ms.steps:
-                    icon = '✅' if step.status == 'done' else '⏳'
-                    stars = '⭐' * (step.priority or 0)
-                    console.print(f"  {icon} {step.description} {stars}")

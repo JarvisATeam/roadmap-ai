@@ -1,0 +1,40 @@
+{
+  "panels": [
+    {
+      "id": "smart_next",
+      "title": "🎯 Next Recommended Task",
+      "command": "roadmap_panels.sh smart",
+      "refresh_interval": "on_demand",
+      "data_path": "data/roadmap/smart_next.json"
+    },
+    {
+      "id": "risks",
+      "title": "⚠️ Risk Summary",
+      "command": "roadmap_panels.sh risks",
+      "refresh_interval": 1800,
+      "data_path": "data/roadmap/risks.json"
+    },
+    {
+      "id": "forecast",
+      "title": "📊 Mission Forecast",
+      "command": "roadmap_panels.sh forecast M-XXXXXXXX",
+      "refresh_interval": 86400,
+      "data_path": "data/roadmap/forecast_M-XXXXXXXX.json"
+    },
+    {
+      "id": "decisions",
+      "title": "📝 Recent Decisions",
+      "command": "roadmap_panels.sh decisions",
+      "refresh_interval": 3600,
+      "data_path": "data/roadmap/decisions.json"
+    },
+    {
+      "id": "progress",
+      "title": "📈 Mission Progress",
+      "command": "roadmap_panels.sh status",
+      "refresh_interval": 900,
+      "data_path": "data/roadmap/status.json"
+    }
+  ],
+  "refresh_all_command": "roadmap_panels.sh all"
+}

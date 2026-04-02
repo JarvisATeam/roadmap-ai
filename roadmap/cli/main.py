@@ -18,7 +18,9 @@ from roadmap.cli.smart_commands import (
     smart_command,
     value_command,
 )
-from roadmap.cli.tasks import complete_task, show_status
+from roadmap.cli.tasks import complete_task
+from roadmap.cli.status_commands import status_command
+from roadmap.cli.report_commands import report_command
 from roadmap.storage.db import get_session, init_db
 from roadmap.storage.models import Mission, Milestone, Step
 
@@ -202,7 +204,6 @@ def export_plan(format, plan, output):
 
 
 main.add_command(complete_task)
-main.add_command(show_status)
 main.add_command(block_task)
 main.add_command(list_blocks)
 main.add_command(unblock_task)
@@ -217,6 +218,9 @@ main.add_command(forecast_command)
 main.add_command(add_mission_command, "add-mission")
 main.add_command(list_missions_command, "list-missions")
 main.add_command(add_step_command, "add-step")
+# Status/report commands
+main.add_command(status_command, "status")
+main.add_command(report_command, "report")
 
 
 cli = main

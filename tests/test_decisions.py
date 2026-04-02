@@ -69,7 +69,8 @@ class TestDecisionCLI:
         result = runner.invoke(cli, ["decide", "task_001", "Test decision", "--json"])
         assert result.exit_code == 0
         payload = json.loads(result.output)
-        assert payload["id"] == "dec_001"
+        assert payload["command"] == "decide"
+        assert payload["data"]["decision"]["id"] == "dec_001"
 
     def test_list_decisions_command(self):
         runner = CliRunner()

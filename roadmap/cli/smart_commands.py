@@ -1,11 +1,10 @@
 """ORION CLI commands."""
 from __future__ import annotations
 
-import json
-
 import click
 
 from roadmap.core import nta, predictor, revenue
+from roadmap.core.json_export import create_envelope, to_json, get_base_metadata
 
 
 def _render_panel(lines):
@@ -29,14 +28,25 @@ def smart_command(subcommand: str, energy: int, last_task: str, as_json: bool) -
         raise SystemExit(1)
     result = nta.smart_next(current_energy=energy, last_task_id=last_task)
     if not result:
-        payload = {"task": None, "message": "No available tasks"}
         if as_json:
-            click.echo(json.dumps(payload))
+            envelope = create_envelope(
+                command="smart next",
+                data={"recommendation": None, "message": "No available tasks"},
+                metadata={**get_base_metadata(), "energy_input": energy}
+            )
+            click.echo(to_json(envelope))
         else:
             click.echo("No available tasks.")
+            click.echo("Create a mission with `roadmap add-mission \"Mission\" --revenue 5000`")
+            click.echo("Add a step with `roadmap add-step M-XXXXXXXX \"Description\" --energy 3`")
         return
     if as_json:
-        click.echo(json.dumps(result, indent=2))
+        envelope = create_envelope(
+            command="smart next",
+            data={"recommendation": result},
+            metadata={**get_base_metadata(), "energy_input": energy}
+        )
+        click.echo(to_json(envelope))
         return
     lines = [
         "RECOMMENDED NEXT TASK",
@@ -62,7 +72,12 @@ def risks_command(mission: str, as_json: bool) -> None:
     """Show risk analysis summary."""
     summary = predictor.get_risk_summary(mission_id=mission)
     if as_json:
-        click.echo(json.dumps(summary, indent=2))
+        envelope = create_envelope(
+            command="risks",
+            data=summary,
+            metadata={**get_base_metadata(), "filter_mission": mission}
+        )
+        click.echo(to_json(envelope))
         return
     lines = [
         "RISK ANALYSIS",
@@ -92,7 +107,12 @@ def value_command(task_id: str, as_json: bool) -> None:
         click.echo(result["error"], err=True)
         raise SystemExit(1)
     if as_json:
-        click.echo(json.dumps(result, indent=2))
+        envelope = create_envelope(
+            command="value",
+            data=result,
+            metadata=get_base_metadata()
+        )
+        click.echo(to_json(envelope))
         return
     lines = [
         f"TASK VALUE: {task_id}",
@@ -118,7 +138,12 @@ def forecast_command(mission_id: str, as_json: bool) -> None:
         click.echo(result["error"], err=True)
         raise SystemExit(1)
     if as_json:
-        click.echo(json.dumps(result, indent=2))
+        envelope = create_envelope(
+            command="forecast",
+            data=result,
+            metadata={**get_base_metadata(), "filter_mission": mission_id}
+        )
+        click.echo(to_json(envelope))
         return
     progress_total = result["tasks_total"] or 1
     pct = result["tasks_completed"] / progress_total if progress_total else 0
