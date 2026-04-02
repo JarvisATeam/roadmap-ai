@@ -113,6 +113,27 @@ See [docs/ORION.md](docs/ORION.md) for full intelligence layer documentation.
 | `roadmap value <task-id>` | Show task value + delay cost | `roadmap value task_003 --json` |
 | `roadmap forecast <mission-id>` | Show mission ROI forecast | `roadmap forecast mission_001` |
 
+All commands support `--json` for machine-readable output.
+
+### Status & Reporting (Phase 3 ✅)
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `roadmap status` | Show mission/step status | `roadmap status --json` |
+| `roadmap report --daily` | Generate ops report | `roadmap report --daily --markdown` |
+
+All commands support `--json` for machine-readable output.
+
+> **📊 Dashboard Integration:** See [docs/DASHBOARD.md](docs/DASHBOARD.md) for JSON schemas and UI integration examples.
+
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `roadmap smart next` | AI-ranked next task with scoring | `roadmap smart next --energy 6` |
+| `roadmap risks` | Show blocker risks and failure outlook | `roadmap risks --mission mission_001` |
+| `roadmap value <task-id>` | Show task value + delay cost | `roadmap value task_003 --json` |
+| `roadmap forecast <mission-id>` | Show mission ROI forecast | `roadmap forecast mission_001` |
+
 > **📘 Deep dive:** See [docs/ORION.md](docs/ORION.md) for scoring formulas, calibration guide, and usage patterns.
 
 All commands support `--json` for machine-readable output.

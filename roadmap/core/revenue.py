@@ -96,9 +96,10 @@ def mission_forecast(mission_id: str) -> Dict:
     if days_remaining != float("inf"):
         expected_completion = (datetime.now() + timedelta(days=days_remaining)).isoformat()
     failure_prob = predictor.mission_failure_probability(mission["id"])
+    mission_name = mission.get("title") or mission.get("name") or "Untitled"
     return {
         "mission_id": mission["id"],
-        "mission_name": mission["name"],
+        "mission_name": mission_name,
         "revenue": mission.get("revenue", 0),
         "completion_probability": round(1.0 - failure_prob, 2),
         "expected_completion": expected_completion,

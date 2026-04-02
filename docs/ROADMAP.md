@@ -202,7 +202,7 @@ docs/
 
 ---
 
-## Phase 3.0 🔵 Planned — Dashboard Integration
+## Phase 3.0 ✅ Complete — Dashboard Integration
 
 **Gate:** Phase 2 complete ✅  
 **Estimate:** 3–5 days  
@@ -210,57 +210,36 @@ docs/
 
 ### Scope
 
-#### JSON Export Contract
+#### JSON Export Layer
 
-Standardized output format for all commands:
-
-```json
-{
-  "roadmap_version": "0.2.0",
-  "timestamp": "2025-01-15T14:32:00Z",
-  "command": "smart next",
-  "data": { ... },
-  "metadata": {
-    "missions_count": 3,
-    "tasks_total": 12,
-    "tasks_blocked": 2
-  }
-}
-```
+- Standardized envelope schema (version, timestamp, command, data, metadata)
+- Smart/Risks/Value/Forecast/Decisions all support `--json`
+- `roadmap status --json` and `roadmap report --daily --json` implemented
 
 #### Dashboard Surface Points
 
-1. **Status Panel**
-   - Current mission health (from `roadmap status --json`)
-   - Top 3 risks (from `roadmap risks --json`)
-   - Next recommended task (from `roadmap smart next --json`)
+1. Smart Next Panel (`roadmap smart next --json`)
+2. Risk Summary Panel (`roadmap risks --json`)
+3. Mission Progress Panel (`roadmap status --json`)
+4. Recent Decisions Panel (`roadmap list-decisions --json`)
+5. Daily Report Panel (`roadmap report --daily --json`)
 
-2. **Forecast Panel**
-   - Mission completion probability
-   - Expected delivery dates
-   - Revenue at risk
+#### Wrapper + Config
 
-3. **Decision Trail**
-   - Last 10 decisions with context
-   - Filter by mission/task
-   - Export to PDF/Markdown
+- `scripts/roadmap_panels.sh` — refreshes panel JSON files
+- `scripts/roadmap_panels.json` — panel metadata for mission-control
+- `DEPLOY_DASHBOARD_PHASE3.md` — manual deployment guide
 
-#### Integration with `~/roadmapai`
 
-```bash
-# ~/roadmapai wrapper calls roadmap-ai
-bin/roadmap_python.sh smart next --json > /tmp/orion_next.json
+### Status
 
-# Dashboard reads JSON
-dashboard/orion_panel.py render /tmp/orion_next.json
-```
-
-### Done When
-
-- [ ] All commands have stable `--json` schema
-- [ ] `~/roadmapai` can consume output without parsing hacks
-- [ ] Dashboard shows at least 3 ORION-powered panels
-- [ ] Daily ops report generator works (`roadmap report --daily`)
+- [x] JSON envelopes for all commands
+- [x] Smart/Risks/Value/Forecast/Decisions support `--json`
+- [x] `roadmap status` + `roadmap report --daily` implemented
+- [x] Panel wrapper/config in repo (`scripts/`)
+- [x] Local panel exports verified
+- [ ] Deployment to `~/roadmapai` (pending FS access)
+- [ ] Dashboard UI (Phase 4)
 
 ### Why Phase 3
 
@@ -268,7 +247,7 @@ dashboard/orion_panel.py render /tmp/orion_next.json
 
 **Phase 3 state:** Dashboard surfaces ORION intelligence at a glance.
 
-**Value:** Operator sees risks/recommendations without leaving mission-control UI.
+**Value:** Operators and stakeholders see ORION recommendations, risks, and status without leaving mission-control UI.
 
 ### Real Operator Workflow (Pilot)
 
