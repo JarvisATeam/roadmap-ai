@@ -7,6 +7,17 @@ import click
 
 from roadmap.core.export import ExportEngine
 from roadmap.cli.blockers import block_task, list_blocks, unblock_task
+from roadmap.cli.decision_commands import (
+    decide_command,
+    list_decisions_command,
+    show_decision_command,
+)
+from roadmap.cli.smart_commands import (
+    forecast_command,
+    risks_command,
+    smart_command,
+    value_command,
+)
 from roadmap.cli.tasks import complete_task, show_status
 from roadmap.storage.db import get_session, init_db
 from roadmap.storage.models import Mission, Milestone, Step
@@ -190,6 +201,13 @@ main.add_command(show_status)
 main.add_command(block_task)
 main.add_command(list_blocks)
 main.add_command(unblock_task)
+main.add_command(decide_command)
+main.add_command(list_decisions_command)
+main.add_command(show_decision_command)
+main.add_command(smart_command)
+main.add_command(risks_command)
+main.add_command(value_command)
+main.add_command(forecast_command)
 
 
 cli = main
