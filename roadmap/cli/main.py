@@ -1,264 +1,198 @@
-import builtins
+"""Main CLI entry point."""
+import json
+import pathlib
+from datetime import datetime, timezone
+
 import click
-from roadmap.storage.db import init_db, get_session
-from roadmap.storage.models import Mission, Milestone, Step, CheckIn
-from roadmap.core.recovery import RecoveryEngine
-from datetime import datetime
+
+from roadmap.core.export import ExportEngine
+from roadmap.cli.blockers import block_task, list_blocks, unblock_task
+from roadmap.cli.tasks import complete_task, show_status
+from roadmap.storage.db import get_session, init_db
+from roadmap.storage.models import Mission, Milestone, Step
+
+try:
+    from rich.console import Console
+    from rich.panel import Panel
+except ImportError:
+    from roadmap.cli.display_fallback import Console, Panel
+
+console = Console()
+
+
+def ensure_db():
+    """Ensure database exists."""
+    init_db()
+
+
+def load_plan(plan_path=None):
+    path = pathlib.Path(plan_path) if plan_path else pathlib.Path('plan.json')
+    if not path.exists():
+        click.echo(f"Plan file not found: {path}", err=True)
+        return {}
+    return json.loads(path.read_text())
+
+
+def get_active_mission(session):
+    mission = session.query(Mission).filter_by(status='active').first()
+    if not mission:
+        mission = Mission(
+            title='Default Mission',
+            description='Auto-created mission',
+            status='active',
+            started_at=datetime.now(timezone.utc)
+        )
+        session.add(mission)
+        session.flush()
+    return mission
+
+
+def get_or_create_milestone(session, mission, milestone_name):
+    milestone = (
+        session.query(Milestone)
+        .filter_by(mission_id=mission.id, title=milestone_name)
+        .first()
+    )
+    if not milestone:
+        order = (
+            session.query(Milestone)
+            .filter_by(mission_id=mission.id)
+            .count()
+        )
+        milestone = Milestone(
+            mission_id=mission.id,
+            title=milestone_name or 'Backlog',
+            order=order + 1,
+            status='active'
+        )
+        session.add(milestone)
+        session.flush()
+    return milestone
+
 
 @click.group()
-def cli():
-    '''roadmap.ai - Never lose the thread again'''
+def main():
+    """Mission-oriented project management CLI."""
     pass
 
-@cli.command()
-def init():
-    '''Initialize roadmap database'''
+
+@main.command('init')
+def init_db_command():
     init_db()
-    click.echo("✅ Database initialized at ~/.roadmap/roadmap.db")
+    click.echo("✅ Initialized database")
 
-@cli.command()
-@click.argument('title')
-def create(title):
-    '''Create a new mission'''
-    session = get_session()
-    mission = Mission(title=title)
-    session.add(mission)
-    session.commit()
-    click.echo(f"✅ Mission created: {mission.title}")
-    click.echo(f"   ID: {mission.id}")
-    session.close()
 
-@cli.command()
-@click.argument('mission_id')
-@click.argument('title')
-@click.option('--success', help='Success criteria')
-def milestone(mission_id, title, success):
-    '''Add milestone to mission'''
-    session = get_session()
-    milestone = Milestone(
-        mission_id=mission_id,
-        title=title,
-        success_criteria=success
-    )
-    session.add(milestone)
-    session.commit()
-    click.echo(f"✅ Milestone added: {milestone.title}")
-    session.close()
+@main.command('add-task')
+@click.argument('description')
+@click.option('--milestone', '-m', help='Milestone name')
+@click.option('--priority', '-p', type=int, default=3, help='Priority (1-5)')
+@click.option('--due', '-d', help='Due date (YYYY-MM-DD)')
+@click.option('--tags', '-t', multiple=True, help='Tags (repeatable)')
+def add_task(description, milestone, priority, due, tags):
+    ensure_db()
+    with get_session() as session:
+        mission = get_active_mission(session)
+        ms = get_or_create_milestone(session, mission, milestone or 'Backlog')
+        step = Step(
+            milestone_id=ms.id,
+            description=description,
+            status='todo',
+            priority=priority,
+            tags=','.join(tags) if tags else None
+        )
+        if due:
+            step.due_date = datetime.strptime(due, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+        session.add(step)
+        session.commit()
+        console.print(f"[green]✅ Added task:[/green] {description}")
+        console.print(f"   Milestone: {ms.title}")
+        console.print(f"   ID: {step.id}")
 
-@cli.command()
-@click.argument('milestone_id')
-@click.argument('action')
-def step(milestone_id, action):
-    '''Add step to milestone'''
-    session = get_session()
-    step = Step(
-        milestone_id=milestone_id,
-        action=action
-    )
-    session.add(step)
-    session.commit()
-    click.echo(f"✅ Step added: {step.action}")
-    click.echo(f"   ID: {step.id}")
-    session.close()
 
-@cli.command()
-@click.argument('step_id')
-def done(step_id):
-    '''Mark step as done'''
-    session = get_session()
-    step = session.query(Step).filter_by(id=step_id).first()
-    
-    if not step:
-        click.echo("❌ Step not found")
-        session.close()
-        return
-    
-    step.status = 'done'
-    step.completed_at = datetime.utcnow()
-    session.commit()
-    click.echo(f"✅ Step completed: {step.action}")
-    session.close()
-
-@cli.command()
-@click.argument('mission_id')
-@click.argument('summary')
-@click.option('--blockers', help='Current blockers')
-@click.option('--mood', type=click.Choice(['high', 'medium', 'low']), default='medium')
-def checkin(mission_id, summary, blockers, mood):
-    '''Log a check-in for mission'''
-    session = get_session()
-    checkin_entry = CheckIn(
-        mission_id=mission_id,
-        progress_summary=summary,
-        blockers_text=blockers,
-        mood=mood
-    )
-    session.add(checkin_entry)
-    session.commit()
-    click.echo(f"✅ Check-in logged")
-    click.echo(f"   Mood: {mood}")
-    if blockers:
-        click.echo(f"   Blockers: {blockers}")
-    session.close()
-
-@cli.command()
-def status():
-    '''Show current status of all missions'''
-    session = get_session()
-    missions = session.query(Mission).filter_by(status='active').all()
-    
-    if not missions:
-        click.echo("No active missions. Create one with: roadmap create <title>")
-        return
-    
-    for mission in missions:
-        click.echo(f"\n📋 {mission.title}")
-        click.echo(f"   Created: {mission.created_at.strftime('%Y-%m-%d')}")
-        
-        milestones = session.query(Milestone).filter_by(mission_id=mission.id).all()
-        if milestones:
-            click.echo(f"   Milestones: {len(milestones)}")
-            for ms in milestones:
-                status_icon = "✅" if ms.status == 'completed' else "🔄" if ms.status == 'in_progress' else "⏳"
-                click.echo(f"     {status_icon} {ms.title}")
-                
-                steps = session.query(Step).filter_by(milestone_id=ms.id).all()
-                if steps:
-                    for s in steps:
-                        step_icon = "✅" if s.status == 'done' else "🔄" if s.status == 'in_progress' else "☐"
-                        click.echo(f"        {step_icon} {s.action}")
-    
-    session.close()
-
-@cli.command(name='open')
-@click.argument('mission_id', required=False)
-def open_brief(mission_id):
-    '''Show re-entry brief (30-second context recovery)'''
-    engine = RecoveryEngine()
-    
-    if mission_id:
-        brief = engine.generate_brief(mission_id)
-        if brief:
-            click.echo(engine.format_brief(brief))
+@main.command('next')
+@click.option('--all', '-a', is_flag=True, help='Show all pending tasks')
+def next_task(all):
+    ensure_db()
+    with get_session() as session:
+        query = (
+            session.query(Step)
+            .join(Milestone)
+            .join(Mission)
+            .filter(
+                Mission.status == 'active',
+                Step.status.in_(['todo', 'in_progress'])
+            )
+            .order_by(Step.priority.desc(), Step.created_at)
+        )
+        if all:
+            tasks = query.limit(10).all()
+            if not tasks:
+                console.print('[green]🎉 No pending tasks![/green]')
+                return
+            console.print('\n[bold]Pending Tasks:[/bold]')
+            for idx, task in enumerate(tasks, 1):
+                stars = '⭐' * (task.priority or 0)
+                console.print(f"{idx}. {task.description} {stars}")
+                console.print(f"   ID: {task.id}")
+                console.print(f"   Milestone: {task.milestone.title}\n")
         else:
-            click.echo("❌ Mission not found")
-    else:
-        brief_text = engine.get_active_mission_brief()
-        if brief_text:
-            click.echo(brief_text)
-        else:
-            click.echo("No active missions. Create one with: roadmap create <title>")
+            task = query.first()
+            if not task:
+                console.print('[green]🎉 No pending tasks![/green]')
+                return
+            content = f"""[bold]{task.description}[/bold]\n\nID: {task.id}\nStatus: {task.status}\nPriority: {'⭐' * (task.priority or 0)}\nMilestone: {task.milestone.title}"""
+            if task.due_date:
+                content += f"\nDue: {task.due_date.strftime('%Y-%m-%d')}"
+            if task.tags:
+                content += f"\nTags: {task.tags}"
+            panel = Panel(content, title='Next Task', border_style='cyan')
+            console.print(panel)
 
-@cli.command()
-@click.argument('mission_id')
-@click.option('--format', type=click.Choice(['markdown', 'json', 'csv', 'summary']), default='markdown')
-@click.option('--output', type=click.Path(), help='Output file (default: stdout)')
-def export(mission_id, format, output):
-    """Export mission plan in various formats"""
-    from roadmap.core.export import ExportEngine
-    
-    session = get_session()
-    mission = session.query(Mission).filter_by(id=mission_id).first()
-    
-    if not mission:
-        click.echo(f"❌ Mission not found: {mission_id}")
-        session.close()
+
+@main.command('summary')
+@click.option('--plan', type=click.Path(exists=True), help='Path to plan.json')
+def summary(plan):
+    data = load_plan(plan)
+    mission = data.get('mission', {})
+    console.print(f"\n[bold cyan]Mission:[/bold cyan] {mission.get('name', 'Untitled')}")
+    description = mission.get('description', '')
+    if description:
+        console.print(description + '\n')
+    for ms in mission.get('milestones', []):
+        console.print(f"[bold]{ms['name']}[/bold]")
+        for task in ms.get('tasks', []):
+            icon = '✅' if task.get('status') == 'done' else '⏳'
+            console.print(f"  {icon} {task['description']}")
+
+
+@main.command('export')
+@click.argument('format', type=click.Choice(['markdown', 'html', 'json']))
+@click.option('--plan', type=click.Path(exists=True), help='Path to plan.json')
+@click.option('--output', '-o', help='Output file path')
+def export_plan(format, plan, output):
+    import subprocess
+    script = pathlib.Path('scripts') / f'export_{format}.py'
+    if not script.exists():
+        click.echo(f"Export script not found: {script}", err=True)
         return
-    
-    # Build plan dict
-    plan = {
-        "plan_id": mission.id,
-        "title": mission.title,
-        "milestones": []
-    }
-    
-    for ms in mission.milestones:
-        milestone = {
-            "id": ms.id,
-            "title": ms.title,
-            "success_criteria": ms.success_criteria,
-            "steps": []
-        }
-        for step in ms.steps:
-            milestone["steps"].append({
-                "id": step.id,
-                "action": step.action,
-                "status": step.status,
-                "completed_at": step.completed_at.isoformat() if step.completed_at else None
-            })
-        plan["milestones"].append(milestone)
-    
-    session.close()
-    
-    engine = ExportEngine()
-    
-    if format == 'markdown':
-        result = engine.to_markdown(plan)
-    elif format == 'json':
-        result = engine.to_json(plan)
-    elif format == 'csv':
-        result = engine.to_csv(plan)
-    elif format == 'summary':
-        result = engine.summary(plan)
-    
+    cmd = ['python', str(script)]
+    if plan:
+        cmd.extend(['--plan', plan])
     if output:
-        with builtins.open(output, 'w') as f:
-            f.write(result)
-        click.echo(f"✅ Exported to {output}")
-    else:
-        click.echo(result)
-
-@cli.command()
-@click.argument('file1')
-@click.argument('file2')
-def diff(file1, file2):
-    """Compare two JSON plan files"""
-    import json
-    from roadmap.core.plan_diff import PlanDiffEngine
-    
-    try:
-        with builtins.open(file1) as f1:
-            plan1 = json.load(f1)
-        with builtins.open(file2) as f2:
-            plan2 = json.load(f2)
-    except FileNotFoundError as e:
-        click.echo(f"❌ File not found: {e}")
-        return
-    except json.JSONDecodeError as e:
-        click.echo(f"❌ Invalid JSON: {e}")
-        return
-    
-    # Extract steps from plans
-    def extract_steps(plan):
-        steps = []
-        for ms in plan.get("milestones", []):
-            for step in ms.get("steps", []):
-                steps.append({
-                    "id": step.get("id", ""),
-                    "action": step.get("action", step.get("title", "")),
-                    "status": step.get("status", "unknown")
-                })
-        return steps
-    
-    engine = PlanDiffEngine()
-    result = engine.compute_diff(extract_steps(plan1), extract_steps(plan2))
-    
-    click.echo(f"\n📊 Plan Comparison")
-    click.echo(f"{'='*50}")
-    click.echo(f"✅ Completed: {len(result.completed)}")
-    click.echo(f"⏭  Skipped: {len(result.skipped)}")
-    click.echo(f"➕ Added: {len(result.added)}")
-    click.echo(f"⏰ Delayed: {len(result.delayed)}")
-    click.echo(f"🎯 On track: {len(result.on_track)}")
-    click.echo(f"📈 Drift score: {result.drift_score}")
-    
-    if result.has_drift:
-        click.echo(f"\n⚠️  Drift detected: {result.summary}")
+        cmd.extend(['--output', output])
+    result = subprocess.run(cmd)
+    if result.returncode == 0:
+        click.echo(f"✅ Exported to {format}")
 
 
-def main():
-    cli()
+main.add_command(complete_task)
+main.add_command(show_status)
+main.add_command(block_task)
+main.add_command(list_blocks)
+main.add_command(unblock_task)
 
+
+cli = main
 
 if __name__ == '__main__':
     main()
