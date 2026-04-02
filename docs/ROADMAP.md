@@ -298,6 +298,30 @@ roadmap forecast M-e9f70c2e
 
 **Phase 3 readiness:** GO WITH FIXES — build dashboards after the above fixes land.
 
+### Limitations Resolved
+
+~~1. **~/roadmapai write access:** Manual deployment required~~
+
+**✅ SOLVED:**
+- `scripts/deploy_to_roadmapai.sh` — auto-deploy with permission fallback
+- `scripts/export_panels_local.sh` — local export when remote write fails
+- Clear messaging + verification steps
+
+~~2. **No auto-refresh:** Cron setup is manual~~
+
+**✅ SOLVED:**
+- `scripts/setup_cron.sh` — installs cron job for `~/roadmapai`
+- `scripts/setup_cron_local.sh` — local alternative
+- Configurable interval + log monitoring
+
+~~3. **No validation:** JSON schema validation not enforced~~
+
+**✅ SOLVED:**
+- `roadmap/core/json_validator.py` — schema validation engine
+- `roadmap validate` / `roadmap validate-all` CLI commands
+- Auto-detect schema from `command` field; fallback basic validation if jsonschema missing
+
+
 ---
 
 ## Migration Guide

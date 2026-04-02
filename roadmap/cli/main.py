@@ -21,6 +21,7 @@ from roadmap.cli.smart_commands import (
 from roadmap.cli.tasks import complete_task
 from roadmap.cli.status_commands import status_command
 from roadmap.cli.report_commands import report_command
+from roadmap.cli.validate_commands import validate_all_command, validate_command
 from roadmap.storage.db import get_session, init_db
 from roadmap.storage.models import Mission, Milestone, Step
 
@@ -221,6 +222,8 @@ main.add_command(add_step_command, "add-step")
 # Status/report commands
 main.add_command(status_command, "status")
 main.add_command(report_command, "report")
+main.add_command(validate_command, "validate")
+main.add_command(validate_all_command, "validate-all")
 
 
 cli = main

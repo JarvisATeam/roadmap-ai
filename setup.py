@@ -10,6 +10,7 @@ setup(
         "sqlalchemy>=2.0.0",
         "openai>=1.0.0",
         "python-dotenv>=1.0.0",
+        "jsonschema>=4.0.0",
     ],
     entry_points={
         "console_scripts": [
