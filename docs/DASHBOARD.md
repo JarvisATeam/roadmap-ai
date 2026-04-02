@@ -247,3 +247,77 @@ fetch('data/roadmap/status.json')
 ---
 
 ... [continue entire file content per specification]
+
+---
+
+## Automated Deployment
+
+### Option 1 — Deploy to `~/roadmapai`
+
+```bash
+cd ~/roadmap-ai
+./scripts/deploy_to_roadmapai.sh   # handles permission fallback
+./scripts/setup_cron.sh           # auto-refresh every 15 min
+ls -lh ~/roadmapai/data/roadmap/
+```
+
+### Option 2 — Local Export (Fallback)
+
+```bash
+cd ~/roadmap-ai
+./scripts/export_panels_local.sh
+./scripts/setup_cron_local.sh
+ls -lh panel_output/
+```
+
+Generated JSON files can be copied to any dashboard data directory.
+
+---
+
+## Schema Validation
+
+### CLI Usage
+
+```bash
+roadmap validate panel_output/smart_next.json
+roadmap validate-all panel_output/ --strict
+```
+
+### Programmatic Validation
+
+```python
+from roadmap.core.json_validator import validate_json_file
+is_valid, error = validate_json_file(Path('panel_output/smart_next.json'), 'smart next')
+if not is_valid:
+    raise ValueError(error)
+```
+
+---
+
+## Monitoring & Logs
+
+- Remote deployment: `tail -f ~/roadmapai/logs/panel_refresh.log`
+- Local export: `tail -f ~/roadmap-ai/logs/panel_export.log`
+
+Manual refresh:
+
+```bash
+cd ~/roadmapai && bin/roadmap_panels.sh all
+cd ~/roadmap-ai && ./scripts/export_panels_local.sh
+```
+
+Health check helper:
+
+```bash
+#!/bin/bash
+dir="panel_output"  # or ~/roadmapai/data/roadmap
+for panel in smart_next risks status decisions daily_report; do
+  file="$dir/${panel}.json"
+  if [ -f "$file" ]; then
+    age=$(( ($(date +%s) - $(stat -f %m "$file")) / 60 ))
+    echo "✅ $panel: ${age} min old"
+  else
+    echo "❌ $panel missing"
+  fi
+done
+```

@@ -126,6 +126,35 @@ All commands support `--json` for machine-readable output.
 
 > **📊 Dashboard Integration:** See [docs/DASHBOARD.md](docs/DASHBOARD.md) for JSON schemas and UI integration examples.
 
+## Dashboard Deployment & Validation
+
+### Automated Deployment
+
+```bash
+# Prefer remote deployment (falls back automatically)
+./scripts/deploy_to_roadmapai.sh
+
+# Set up auto-refresh every 15 minutes
+./scripts/setup_cron.sh        # tries ~/roadmapai
+./scripts/setup_cron_local.sh  # use if exporting locally to panel_output/
+```
+
+### Local Export (Fallback)
+
+```bash
+./scripts/export_panels_local.sh
+ls -lh panel_output/
+```
+
+### Validation (CI/CD Friendly)
+
+```bash
+roadmap validate panel_output/smart_next.json
+roadmap validate-all panel_output/ --strict  # exits 1 on failure
+```
+
+See [docs/DASHBOARD.md](docs/DASHBOARD.md) for full deployment, cron, and validation workflows.
+
 
 | Command | Description | Example |
 |---------|-------------|---------|
