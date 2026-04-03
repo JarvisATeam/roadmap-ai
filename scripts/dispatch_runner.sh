@@ -97,6 +97,46 @@ run_with_timeout() {
     return "$exit_code"
 }
 
+# --- WAKE/SLEEP HANDLING ---
+ensure_awake() {
+    if command -v caffeinate >/dev/null 2>&1; then
+        log_info "[WAKE] Preventing sleep via caffeinate"
+        caffeinate -dimsu &
+        CAFFEINATE_PID=$!
+        trap 'kill ${CAFFEINATE_PID:-0} 2>/dev/null || true' EXIT
+    fi
+}
+
+check_wake_from_sleep() {
+    if [ "$(uname -s)" != "Darwin" ]; then
+        return 0
+    fi
+    local last_wake
+    last_wake=$(pmset -g log 2>/dev/null | grep -i "wake" | tail -1 | awk '{print $1" "$2" "$3" "$4}')
+    if [ -n "$last_wake" ]; then
+        log_info "[WAKE] Last wake event: $last_wake"
+    fi
+}
+
+retry_on_failure() {
+    local verb="$1"
+    shift
+    local max_retries="${DISPATCH_MAX_RETRIES:-2}"
+    local attempt=0
+    while [ "$attempt" -lt "$max_retries" ]; do
+        attempt=$((attempt + 1))
+        log_info "[RETRY] $verb attempt ${attempt}/${max_retries}"
+        if "$@"; then
+            return 0
+        fi
+        if [ "$attempt" -lt "$max_retries" ]; then
+            log_warn "[RETRY] $verb failed; retrying in 5s"
+            sleep 5
+        fi
+    done
+    return 1
+}
+
 # ── Colors (degrade gracefully if no tty) ───────────────
 if [ -t 1 ]; then
     GREEN='\033[0;32m'
@@ -261,6 +301,39 @@ run_step() {
     return 0
 }
 
+# ── Verb dispatch helper ───────────────────────────────
+dispatch_verb() {
+    local verb="$1"
+    shift
+    case "$verb" in
+        standup)
+            do_standup "$@"
+            ;;
+        forecast)
+            do_forecast "$@"
+            ;;
+        decide)
+            do_decide "$@"
+            ;;
+        export-panels)
+            do_export_panels "$@"
+            ;;
+        closeout)
+            do_closeout "$@"
+            ;;
+        health)
+            do_health "$@"
+            ;;
+        *)
+            log_fail "Unknown verb: $verb"
+            log_fail "This operation is not defined in the ops contract."
+            echo ""
+            usage
+            return 1
+            ;;
+    esac
+}
+
 # ── Verb implementations ───────────────────────────────
 
 do_standup() {
@@ -291,6 +364,11 @@ do_standup() {
     echo "Top Risk:"
     head -10 "${OUTPUT_DIR}/risks.json" 2>/dev/null || echo "  (no output)"
     echo ""
+
+    if [ -x "${SCRIPT_DIR}/format_phone_summary.sh" ]; then
+        "${SCRIPT_DIR}/format_phone_summary.sh" "${OUTPUT_DIR}" 2>/dev/null || true
+        log_info "[PHONE] Summary → ${OUTPUT_DIR}/phone_summary.txt"
+    fi
 }
 
 do_forecast() {
@@ -534,54 +612,31 @@ main() {
 
     case "$verb" in
         standup|forecast|decide|export-panels|closeout)
-            if ! idem_key=$(idem_guard "$verb" "$raw_args"); then
+            if idem_key=$(idem_guard "$verb" "$raw_args"); then
+                idem_active=1
+            else
                 log_info "Idempotent replay detected for $verb. Exiting without execution."
                 exit 0
             fi
-            idem_active=1
-            trap 'idem_mark_failure "$idem_key" "$verb"' ERR
             ;;
         *)
             ;;
     esac
 
-    # Shift past verb to get params
     shift
-
-    # Pre-flight (validates repo, venv, dirs)
     preflight
+    ensure_awake
+    check_wake_from_sleep
 
-    # Dispatch to verb
-    case "$verb" in
-        standup)
-            do_standup "$@"
-            ;;
-        forecast)
-            do_forecast "$@"
-            ;;
-        decide)
-            do_decide "$@"
-            ;;
-        export-panels)
-            do_export_panels "$@"
-            ;;
-        closeout)
-            do_closeout "$@"
-            ;;
-        health)
-            do_health "$@"
-            ;;
-        *)
-            log_fail "Unknown verb: $verb"
-            log_fail "This operation is not defined in the ops contract."
-            echo ""
-            usage
-            ;;
-    esac
+    if ! retry_on_failure "$verb" dispatch_verb "$verb" "$@"; then
+        if [ $idem_active -eq 1 ]; then
+            idem_mark_failure "$idem_key" "$verb"
+        fi
+        exit 1
+    fi
 
     if [ $idem_active -eq 1 ]; then
         idem_mark_success "$idem_key" "$verb"
-        trap - ERR
     fi
 }
 
