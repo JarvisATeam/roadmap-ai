@@ -6,7 +6,7 @@ ORION provides intelligent task prioritization, risk prediction, and revenue for
 
 - Phase 2.5 production pilot verdict: **GO WITH FIXES** — ORION delivered ~78% correct recommendations.
 - Strength: revenue × energy scoring works on real mission `M-e9f70c2e` (€4000, 5 steps).
-- Gap: no deadline/urgency input yet, so overdue tasks are treated the same as normal ones.
+- Tip: capture deadlines with `roadmap add-step M-XXXX "Task" --energy 3 --due 2024-04-05` so ORION urgency reflects real due dates.
 
 ## Components
 
@@ -517,7 +517,7 @@ Add +1 for junior contributors or +2 for unfamiliar technology.
 Deadlines directly influence urgency. If tasks never appear urgent, add or tighten due dates:
 
 ```bash
-roadmap add-task mission_001 "Comms plan" --energy 3 --deadline 2025-01-20
+roadmap add-step mission_001 "Comms plan" --energy 3 --due 2025-01-20
 ```
 
 ### When Scores Look Wrong
@@ -576,7 +576,7 @@ roadmap forecast M-e9f70c2e
 ## Known Gaps Before Dashboard Build
 
 - `roadmap decide` still expects full UUIDs; needs short ID/prefix support for fast logging.
-- ORION urgency ignores deadlines; need due-date capture in `add-step` and scoring.
+- Deadlines now flow through `roadmap add-step ... --due YYYY-MM-DD`, so urgency reflects overdue/soon tasks.
 - Need a `roadmap list-steps --mission` (or similar) command to feed dashboards with batch task data.
 
 ## Phase 3 Readiness

@@ -1,5 +1,7 @@
 """Mission management CLI commands."""
 
+from datetime import datetime, timezone
+
 import click
 import json
 
@@ -80,9 +82,10 @@ def list_missions_command(as_json: bool):
 @click.argument("mission_code")
 @click.argument("description")
 @click.option("--energy", type=int, default=3, help="Energy level (1-10)")
+@click.option("--due", "-d", type=click.DateTime(formats=["%Y-%m-%d"]), default=None, help="Due date (YYYY-MM-DD)")
 @click.option("--milestone", "milestone_title", default=None, help="Milestone title (creates if missing)")
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON")
-def add_step_command(mission_code: str, description: str, energy: int, milestone_title: str, as_json: bool):
+def add_step_command(mission_code: str, description: str, energy: int, due, milestone_title: str, as_json: bool):
     """Add a step to a mission."""
     from roadmap.storage.models import Step
 
@@ -128,7 +131,14 @@ def add_step_command(mission_code: str, description: str, energy: int, milestone
                 session.add(milestone)
                 session.flush()
 
-        step = Step(milestone_id=milestone.id, description=description, energy=energy)
+        due_date = due.replace(tzinfo=timezone.utc) if due and not due.tzinfo else due
+
+        step = Step(
+            milestone_id=milestone.id,
+            description=description,
+            energy=energy,
+            due_date=due_date,
+        )
         session.add(step)
         session.commit()
 

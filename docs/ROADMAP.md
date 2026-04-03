@@ -293,7 +293,7 @@ roadmap forecast M-e9f70c2e
 
 **Known gaps before dashboard build:**
 - `roadmap decide` needs short ID/prefix support (UUID logging is slow).
-- Deadlines/urgency need to flow into `add-step` and ORION scoring.
+- Deadlines now flow through `roadmap add-step ... --due YYYY-MM-DD`, feeding ORION urgency.
 - Need `roadmap list-steps --mission` (or equivalent) for batch data feeds to the UI.
 
 **Phase 3 readiness:** GO WITH FIXES — build dashboards after the above fixes land.

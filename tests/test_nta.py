@@ -1,4 +1,6 @@
 """Tests for Next Task Algorithm."""
+from datetime import datetime, timedelta, timezone
+
 import pytest
 
 from roadmap.core import nta
@@ -41,6 +43,18 @@ class TestScoringHelpers:
 
     def test_urgency_without_deadline(self):
         assert nta.calculate_urgency({}) == 0.8
+
+    def test_urgency_overdue(self):
+        deadline = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+        assert nta.calculate_urgency({"deadline": deadline}) == 2.0
+
+    def test_urgency_within_three_days(self):
+        deadline = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
+        assert nta.calculate_urgency({"deadline": deadline}) == 1.5
+
+    def test_urgency_within_week(self):
+        deadline = (datetime.now(timezone.utc) + timedelta(days=5)).isoformat()
+        assert nta.calculate_urgency({"deadline": deadline}) == 1.2
 
     def test_energy_match(self):
         task = {"energy": 5}

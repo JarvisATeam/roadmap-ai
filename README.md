@@ -204,6 +204,8 @@ Top commands from pilot (7 days):
 - `roadmap smart next` — 18 uses — primary prioritization loop
 - `roadmap decide` — 12 uses — decisions + ORION feedback
 - `roadmap add-step` — 9 uses — queueing mission work
+
+> Tip: When adding a step, capture its deadline for ORION with `roadmap add-step M-XXXX "Task" --energy 3 --due 2024-04-05`. Due dates directly influence the urgency factor used by `roadmap smart next`.
 - `roadmap risks` — 7 uses — blocker cascade detection
 - `roadmap list-decisions` — 5 uses — re-entry context
 
