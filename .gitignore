@@ -63,3 +63,9 @@ plan-*.json
 # Export artifacts
 plan.*
 exports/
+
+# P5 — Agent Orchestration runtime state
+orchestration/runtime/*.json
+orchestration/queue/*.json
+!orchestration/queue/.gitkeep
+!orchestration/runtime/.gitkeep

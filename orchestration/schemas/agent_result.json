@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Result",
+  "description": "Canonical result schema for completed agent tasks",
+  "type": "object",
+  "required": ["task_id", "agent_role", "status", "timestamp"],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^task-[0-9a-f]{8}$"
+    },
+    "agent_role": {
+      "type": "string",
+      "enum": ["GINIE", "AVA", "CODEX", "DISPATCH", "HUMAN_ONLY"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["done", "failed", "blocked"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "output": {
+      "type": "object",
+      "description": "Agent-specific output data"
+    },
+    "changed_files": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "List of files modified (for CODEX)"
+    },
+    "tests_passed": {
+      "type": "boolean",
+      "description": "Test result (for CODEX)"
+    },
+    "commit_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$",
+      "description": "Git commit hash (for CODEX)"
+    },
+    "git_status": {
+      "type": "string",
+      "description": "Output of git status -sb (for CODEX)"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if failed"
+    },
+    "blocked_reason": {
+      "type": "string",
+      "description": "Reason if blocked"
+    }
+  }
+}

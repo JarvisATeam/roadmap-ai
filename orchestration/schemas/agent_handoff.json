@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Handoff",
+  "description": "Canonical handoff schema for agent-to-agent transfer",
+  "type": "object",
+  "required": ["task_id", "from_agent", "to_agent", "timestamp"],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^task-[0-9a-f]{8}$"
+    },
+    "from_agent": {
+      "type": "string",
+      "enum": ["GINIE", "AVA", "CODEX", "DISPATCH", "HUMAN"]
+    },
+    "to_agent": {
+      "type": "string",
+      "enum": ["GINIE", "AVA", "CODEX", "DISPATCH", "HUMAN_ONLY"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "context": {
+      "type": "object",
+      "description": "Handoff context data"
+    },
+    "acceptance_required": {
+      "type": "boolean",
+      "description": "Whether target agent must accept"
+    },
+    "accepted": {
+      "type": "boolean",
+      "description": "Whether handoff was accepted"
+    },
+    "accepted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

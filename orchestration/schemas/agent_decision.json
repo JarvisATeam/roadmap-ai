@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Decision",
+  "description": "Canonical decision schema for approval/rejection",
+  "type": "object",
+  "required": ["task_id", "decision", "decided_by", "timestamp"],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^task-[0-9a-f]{8}$"
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["approved", "rejected", "deferred", "revise"],
+      "description": "Decision outcome"
+    },
+    "decided_by": {
+      "type": "string",
+      "enum": ["AVA", "HUMAN", "POLICY"],
+      "description": "Who made the decision"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Decision rationale"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Decision confidence (0-1)"
+    },
+    "requires_human": {
+      "type": "boolean",
+      "description": "Flag if human review needed"
+    }
+  }
+}
