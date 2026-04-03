@@ -4,6 +4,29 @@ import click
 
 from roadmap.core import decisions
 from roadmap.core.json_export import create_envelope, to_json, get_base_metadata
+from roadmap.core.id_resolver import (
+    AmbiguousIDError,
+    IDNotFoundError,
+    load_state_snapshot,
+    resolve_step_id,
+)
+
+
+def _resolve_step_identifier(step_id: str) -> str:
+    """Resolve a provided step ID prefix or exit with an error."""
+    try:
+        state = load_state_snapshot()
+        resolved = resolve_step_id(step_id, state)
+    except IDNotFoundError:
+        raise click.ClickException(f"No step matches prefix '{step_id}'.")
+    except AmbiguousIDError as exc:
+        preview = ", ".join(exc.matches[:5])
+        raise click.ClickException(
+            f"Step prefix '{step_id}' matches multiple steps: {preview}"
+        )
+    except Exception as exc:  # pragma: no cover - defensive
+        raise click.ClickException(f"Failed to resolve step ID: {exc}") from exc
+    return resolved
 
 
 @click.command("decide")
@@ -12,7 +35,8 @@ from roadmap.core.json_export import create_envelope, to_json, get_base_metadata
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON")
 def decide_command(step_id: str, decision_text: str, as_json: bool) -> None:
     """Log a decision for a task or mission."""
-    decision = decisions.add_decision(step_id, decision_text)
+    resolved_id = _resolve_step_identifier(step_id)
+    decision = decisions.add_decision(resolved_id, decision_text)
     if as_json:
         envelope = create_envelope(
             command="decide",

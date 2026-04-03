@@ -54,28 +54,50 @@ class TestDecisionCore:
         assert scoped[0]["step_id"] == "task_001"
 
 
+@pytest.fixture
+def resolver_state(monkeypatch):
+    state = {
+        "missions": [
+            {
+                "id": "mission-123",
+                "steps": [
+                    {"id": "task-alpha-111"},
+                    {"id": "task-beta-222"},
+                ],
+            }
+        ]
+    }
+    monkeypatch.setattr(
+        "roadmap.cli.decision_commands.load_state_snapshot",
+        lambda: state,
+    )
+    return state
+
+
 class TestDecisionCLI:
     """CLI command coverage."""
 
-    def test_decide_command_text_output(self):
+    def test_decide_command_text_output(self, resolver_state):
         runner = CliRunner()
-        result = runner.invoke(cli, ["decide", "task_001", "Test decision"])
+        result = runner.invoke(cli, ["decide", "task-alpha", "Test decision"])
         assert result.exit_code == 0
         assert "Decision logged" in result.output
         assert "dec_001" in result.output
+        assert "task-alpha-111" in result.output
 
-    def test_decide_command_json_output(self):
+    def test_decide_command_json_output(self, resolver_state):
         runner = CliRunner()
-        result = runner.invoke(cli, ["decide", "task_001", "Test decision", "--json"])
+        result = runner.invoke(cli, ["decide", "task-alpha", "Test decision", "--json"])
         assert result.exit_code == 0
         payload = json.loads(result.output)
         assert payload["command"] == "decide"
         assert payload["data"]["decision"]["id"] == "dec_001"
+        assert payload["data"]["decision"]["step_id"] == "task-alpha-111"
 
-    def test_list_decisions_command(self):
+    def test_list_decisions_command(self, resolver_state):
         runner = CliRunner()
-        runner.invoke(cli, ["decide", "task_001", "First"])
-        runner.invoke(cli, ["decide", "task_002", "Second"])
+        runner.invoke(cli, ["decide", "task-alpha", "First"])
+        runner.invoke(cli, ["decide", "task-beta", "Second"])
         result = runner.invoke(cli, ["list-decisions"])
         assert result.exit_code == 0
         assert "dec_001" in result.output
@@ -87,9 +109,9 @@ class TestDecisionCLI:
         assert result.exit_code == 0
         assert "No decisions logged" in result.output
 
-    def test_show_decision_command(self):
+    def test_show_decision_command(self, resolver_state):
         runner = CliRunner()
-        runner.invoke(cli, ["decide", "task_001", "Important decision"])
+        runner.invoke(cli, ["decide", "task-alpha", "Important decision"])
         result = runner.invoke(cli, ["show-decision", "dec_001"])
         assert result.exit_code == 0
         assert "Important decision" in result.output

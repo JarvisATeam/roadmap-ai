@@ -1,9 +1,18 @@
 """ORION CLI commands."""
 from __future__ import annotations
 
+from typing import Optional
+
 import click
 
 from roadmap.core import nta, predictor, revenue
+from roadmap.core.id_resolver import (
+    AmbiguousIDError,
+    IDNotFoundError,
+    load_state_snapshot,
+    resolve_mission_id,
+    resolve_step_id,
+)
 from roadmap.core.json_export import create_envelope, to_json, get_base_metadata
 
 
@@ -14,6 +23,42 @@ def _render_panel(lines):
     for line in lines:
         click.echo(f"│ {line.ljust(43)} │")
     click.echo(footer)
+
+
+def _load_state_for_cli() -> dict:
+    try:
+        state = load_state_snapshot()
+    except Exception as exc:  # pragma: no cover - defensive
+        raise click.ClickException(f"Failed to load mission data: {exc}") from exc
+    if not state.get("missions"):
+        raise click.ClickException("No missions available. Add one with `roadmap add-mission`.")
+    return state
+
+
+def _resolve_step_cli(step_id: str, state: Optional[dict] = None) -> str:
+    state = state or _load_state_for_cli()
+    try:
+        return resolve_step_id(step_id, state)
+    except IDNotFoundError:
+        raise click.ClickException(f"No task matches prefix '{step_id}'.")
+    except AmbiguousIDError as exc:
+        preview = ", ".join(exc.matches[:5])
+        raise click.ClickException(
+            f"Task prefix '{step_id}' matches multiple tasks: {preview}"
+        )
+
+
+def _resolve_mission_cli(mission_id: str, state: Optional[dict] = None) -> str:
+    state = state or _load_state_for_cli()
+    try:
+        return resolve_mission_id(mission_id, state)
+    except IDNotFoundError:
+        raise click.ClickException(f"No mission matches prefix '{mission_id}'.")
+    except AmbiguousIDError as exc:
+        preview = ", ".join(exc.matches[:5])
+        raise click.ClickException(
+            f"Mission prefix '{mission_id}' matches multiple missions: {preview}"
+        )
 
 
 @click.command("smart")
@@ -102,7 +147,9 @@ def risks_command(mission: str, as_json: bool) -> None:
 @click.option("--json", "as_json", is_flag=True, help="Render output as JSON")
 def value_command(task_id: str, as_json: bool) -> None:
     """Show task value breakdown."""
-    result = revenue.task_value(task_id)
+    state = _load_state_for_cli()
+    resolved_task_id = _resolve_step_cli(task_id, state)
+    result = revenue.task_value(resolved_task_id)
     if "error" in result:
         click.echo(result["error"], err=True)
         raise SystemExit(1)
@@ -115,7 +162,7 @@ def value_command(task_id: str, as_json: bool) -> None:
         click.echo(to_json(envelope))
         return
     lines = [
-        f"TASK VALUE: {task_id}",
+        f"TASK VALUE: {resolved_task_id}",
         "",
         f"Base value: €{result['base_value']}",
         f"Critical path bonus: €{result['critical_bonus']}",
@@ -133,7 +180,9 @@ def value_command(task_id: str, as_json: bool) -> None:
 @click.option("--json", "as_json", is_flag=True, help="Render output as JSON")
 def forecast_command(mission_id: str, as_json: bool) -> None:
     """Show mission level forecast."""
-    result = revenue.mission_forecast(mission_id)
+    state = _load_state_for_cli()
+    resolved_mission_id = _resolve_mission_cli(mission_id, state)
+    result = revenue.mission_forecast(resolved_mission_id)
     if "error" in result:
         click.echo(result["error"], err=True)
         raise SystemExit(1)
@@ -141,7 +190,7 @@ def forecast_command(mission_id: str, as_json: bool) -> None:
         envelope = create_envelope(
             command="forecast",
             data=result,
-            metadata={**get_base_metadata(), "filter_mission": mission_id}
+            metadata={**get_base_metadata(), "filter_mission": resolved_mission_id}
         )
         click.echo(to_json(envelope))
         return
