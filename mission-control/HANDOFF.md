@@ -81,4 +81,45 @@ Start ny chat med:
 - SYSTEM_PROMPT_BUILD.md oppdatert med trygg BUILD-modus
 - Arbeidsflyt standardisert til én blokk av gangen med verifisering
 - Heredoc/quote-feil unngås ved å bruke trygg skriveflyt
-- Neste iterasjon: LaunchAgent + git status verifisering
+- Neste iterasjon: LaunchAgent + git status verifisering\n\n## HANDOVER — 2026-04-03T15:11:14Z
+
+### Session Summary
+- Duration: ~4 hours
+- Commits: ~20
+- Features: ~35
+- Test failures: 0
+
+### Completed Phases
+- P0: Dispatch V1 local-verified (live pending cowork)
+- P1: Mission-Control 100% (watch, templates, archive, CI)
+- P2: Roadmap-AI Core 100% (short IDs, deadlines, list-steps, JSON envelope)
+- P3: Dispatch V2 100% (idempotens, error.json, timeout, wake/sleep, phone format)
+
+### Git State
+- Branch: master
+- HEAD: 9400c17
+- Upstream: origin/master (synced)
+- Tag: dispatch-v1.0-local-verified
+- Status: clean
+
+### Next Phase: P4 Dashboard UI
+- Smart Next Panel
+- Risk Summary Panel
+- Progress Panel
+- Decisions Panel
+- Forecast Panel
+
+### Blocked Items
+- P0 G2: Live dispatch needs cowork endpoint + TOKEN
+- CI: GitHub Actions workflow exists but needs remote verification
+
+### Key Files
+- ~/roadmap-ai/scripts/dispatch_runner.sh
+- ~/roadmap-ai/scripts/idempotency.sh
+- ~/roadmap-ai/scripts/format_phone_summary.sh
+- ~/roadmap-ai/dispatch_ops.yaml
+- ~/roadmap-ai/DISPATCH_RULES.md
+- ~/roadmap-ai/mission-control/bin/mc.sh
+- ~/roadmap-ai/mission-control/bin/doctor.sh
+- ~/roadmap-ai/roadmap/core/id_resolver.py
+- ~/roadmap-ai/roadmap/core/nta.py\n
