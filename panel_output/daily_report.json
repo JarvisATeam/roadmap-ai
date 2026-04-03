@@ -1,0 +1,69 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-02T22:48:01.105155Z",
+  "command": "report --daily",
+  "data": {
+    "missions_count": 1,
+    "sections": {
+      "smart_next": {
+        "title": "Next Recommended Task",
+        "recommendation": {
+          "task_id": "280198d6-6e65-4f92-8fba-fd5af85dfc2c",
+          "task_name": "Task 1: High priority",
+          "mission_id": "69ef1c88-ec77-4a97-b819-fb02f812e6ac",
+          "score": 0.8,
+          "factors": {
+            "revenue_weight": 0.5,
+            "urgency": 2.0,
+            "energy_match": 0.8,
+            "context_cost": 0.0,
+            "risk_penalty": 0.0
+          },
+          "rank": 1
+        }
+      },
+      "risks": {
+        "title": "Risk Summary",
+        "summary": {
+          "mission_id": null,
+          "missions_analyzed": 1,
+          "warnings": [],
+          "blocked_tasks": 0,
+          "overdue_tasks": 1,
+          "total_incomplete": 4,
+          "critical_warnings": 0,
+          "summary_warnings": 0
+        }
+      },
+      "forecasts": {
+        "title": "Mission Forecasts",
+        "missions": [
+          {
+            "mission_id": "69ef1c88-ec77-4a97-b819-fb02f812e6ac",
+            "mission_name": "Test Mission",
+            "revenue": 0,
+            "completion_probability": 0.85,
+            "expected_completion": "2026-04-07T00:48:01.069543",
+            "days_remaining": 4.0,
+            "velocity": 1.0,
+            "tasks_completed": 2,
+            "tasks_remaining": 4,
+            "tasks_total": 6
+          }
+        ]
+      },
+      "decisions": {
+        "title": "Recent Decisions",
+        "recent": [],
+        "count": 0
+      }
+    }
+  },
+  "metadata": {
+    "missions_count": 1,
+    "steps_total": 6,
+    "steps_completed": 2,
+    "steps_remaining": 4,
+    "filter_mission": null
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-03T10:52:09.817269Z",
+  "command": "list-decisions",
+  "data": {
+    "decisions": [],
+    "count": 0
+  },
+  "metadata": {
+    "missions_count": 1,
+    "steps_total": 6,
+    "steps_completed": 2,
+    "steps_remaining": 4,
+    "filter_step": null,
+    "limit": null
+  }
+}

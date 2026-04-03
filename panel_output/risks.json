@@ -1,0 +1,22 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-03T10:52:09.184620Z",
+  "command": "risks",
+  "data": {
+    "mission_id": null,
+    "missions_analyzed": 1,
+    "warnings": [],
+    "blocked_tasks": 0,
+    "overdue_tasks": 1,
+    "total_incomplete": 4,
+    "critical_warnings": 0,
+    "summary_warnings": 0
+  },
+  "metadata": {
+    "missions_count": 1,
+    "steps_total": 6,
+    "steps_completed": 2,
+    "steps_remaining": 4,
+    "filter_mission": null
+  }
+}

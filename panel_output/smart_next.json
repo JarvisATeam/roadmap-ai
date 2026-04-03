@@ -1,0 +1,28 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-03T10:52:08.330335Z",
+  "command": "smart next",
+  "data": {
+    "recommendation": {
+      "task_id": "280198d6-6e65-4f92-8fba-fd5af85dfc2c",
+      "task_name": "Task 1: High priority",
+      "mission_id": "69ef1c88-ec77-4a97-b819-fb02f812e6ac",
+      "score": 0.8,
+      "factors": {
+        "revenue_weight": 0.5,
+        "urgency": 2.0,
+        "energy_match": 0.8,
+        "context_cost": 0.0,
+        "risk_penalty": 0.0
+      },
+      "rank": 1
+    }
+  },
+  "metadata": {
+    "missions_count": 1,
+    "steps_total": 6,
+    "steps_completed": 2,
+    "steps_remaining": 4,
+    "energy_input": 5
+  }
+}

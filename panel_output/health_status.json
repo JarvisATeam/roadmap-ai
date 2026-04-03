@@ -1,0 +1,101 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-03T10:50:17.026774Z",
+  "command": "status",
+  "data": {
+    "missions": [
+      {
+        "id": "69ef1c88-ec77-4a97-b819-fb02f812e6ac",
+        "mission_code": "mission_6ac",
+        "title": "Test Mission",
+        "status": "active",
+        "revenue": 0,
+        "milestones": [
+          {
+            "id": "fc3ba2b9-fe67-4e73-a271-fd675fa2f9f4",
+            "title": "Test Milestone",
+            "status": "active",
+            "steps": [
+              {
+                "id": "622dafe6-7a2c-4d80-90bb-47ebf4483f21",
+                "description": "High priority task",
+                "status": "todo",
+                "energy": 3,
+                "priority": 5
+              },
+              {
+                "id": "409445dc-1374-4c54-8d09-342a8a6b1084",
+                "description": "Medium priority task",
+                "status": "in_progress",
+                "energy": 3,
+                "priority": 3
+              },
+              {
+                "id": "5b6edef5-8e46-4ca1-a35e-9865d2413807",
+                "description": "Completed task",
+                "status": "done",
+                "energy": 3,
+                "priority": 4
+              }
+            ],
+            "steps_count": 3,
+            "steps_done": 1
+          },
+          {
+            "id": "b11bf5c4-a34f-44aa-92c0-2b4229f881a9",
+            "title": "Backend",
+            "status": "active",
+            "steps": [
+              {
+                "id": "280198d6-6e65-4f92-8fba-fd5af85dfc2c",
+                "description": "Task 1: High priority",
+                "status": "todo",
+                "energy": 3,
+                "priority": 5
+              },
+              {
+                "id": "0a9e8b9f-e322-49d8-b90e-b793c870b796",
+                "description": "Task 2: Medium priority",
+                "status": "done",
+                "energy": 3,
+                "priority": 3
+              }
+            ],
+            "steps_count": 2,
+            "steps_done": 1
+          },
+          {
+            "id": "fe9dd070-0c4c-47f4-8186-fe1e61f02875",
+            "title": "Frontend",
+            "status": "active",
+            "steps": [
+              {
+                "id": "69d0d12b-adde-4ff9-acd6-0b9b6ee70a44",
+                "description": "Task 3: Frontend work",
+                "status": "todo",
+                "energy": 3,
+                "priority": 4
+              }
+            ],
+            "steps_count": 1,
+            "steps_done": 0
+          }
+        ],
+        "milestones_count": 3,
+        "steps_total": 6,
+        "steps_completed": 2,
+        "steps_in_progress": 1,
+        "steps_blocked": 0,
+        "steps_todo": 3
+      }
+    ],
+    "missions_count": 1
+  },
+  "metadata": {
+    "missions_count": 1,
+    "steps_total": 6,
+    "steps_completed": 2,
+    "steps_remaining": 4,
+    "filter_mission": null
+  }
+}

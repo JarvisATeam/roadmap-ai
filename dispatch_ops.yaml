@@ -1,0 +1,132 @@
+# dispatch_ops.yaml — Dispatch operator contract v1
+# Repo: ~/roadmap-ai
+# Kun kommandoer som er verifisert i Phase 3
+# Sist oppdatert: basert på HEAD 0a85c1f
+
+version: "1.0"
+repo: "~/roadmap-ai"
+venv: "~/roadmap-ai/venv"
+output_dir: "panel_output"
+max_duration_default: 120
+
+ops:
+
+  standup:
+    description: "Morning briefing — smart next, risks, decisions"
+    params: []
+    optional_params:
+      mission_id: null
+    steps:
+      - cmd: "roadmap smart next --json"
+        output: "panel_output/smart_next.json"
+        required: true
+      - cmd: "roadmap risks --json"
+        output: "panel_output/risks.json"
+        required: true
+      - cmd: "roadmap list-decisions --json"
+        output: "panel_output/decisions.json"
+        required: false
+    summary_template: |
+      ## Standup — {date}
+      🎯 Beste neste steg:
+      → {smart_next_top}
+
+      ⚠️ Største risiko:
+      → {risks_top}
+
+      📋 Siste beslutning:
+      → {decisions_latest}
+
+      Detaljer: panel_output/
+    max_duration: 90
+
+  forecast:
+    description: "Probability-weighted forecast for a mission"
+    params:
+      - name: mission_id
+        required: true
+        pattern: "^M-[a-f0-9]{8}$"
+    steps:
+      - cmd: "roadmap forecast {mission_id} --json"
+        output: "panel_output/forecast.json"
+        required: true
+    max_duration: 60
+
+  decide:
+    description: "Log a decision with rationale"
+    params:
+      - name: decision_text
+        required: true
+        max_length: 500
+      - name: rationale
+        required: false
+        max_length: 1000
+    steps:
+      - cmd: "roadmap decide \"{decision_text}\""
+        output: null
+        required: true
+    post_steps:
+      - cmd: "roadmap list-decisions --limit 1 --json"
+        output: "panel_output/decisions.json"
+    max_duration: 30
+
+  export-panels:
+    description: "Export all 5 dashboard panels"
+    params: []
+    steps:
+      - cmd: "roadmap smart next --json"
+        output: "panel_output/smart_next.json"
+        required: true
+      - cmd: "roadmap risks --json"
+        output: "panel_output/risks.json"
+        required: true
+      - cmd: "roadmap status --json"
+        output: "panel_output/status.json"
+        required: true
+      - cmd: "roadmap list-decisions --json"
+        output: "panel_output/decisions.json"
+        required: true
+      - cmd: "roadmap report --daily --json"
+        output: "panel_output/daily_report.json"
+        required: true
+    max_duration: 120
+
+  closeout:
+    description: "End-of-day summary, export, and git commit"
+    params: []
+    steps:
+      - cmd: "roadmap smart next --json"
+        output: "panel_output/smart_next.json"
+        required: true
+      - cmd: "roadmap risks --json"
+        output: "panel_output/risks.json"
+        required: true
+      - cmd: "roadmap status --json"
+        output: "panel_output/status.json"
+        required: true
+      - cmd: "roadmap report --daily --json"
+        output: "panel_output/daily_report.json"
+        required: true
+    post_steps:
+      - cmd: "git add panel_output/"
+        required: false
+      - cmd: "git commit -m \"closeout {date}\""
+        required: false
+    max_duration: 120
+
+  health:
+    description: "System health check — verify CLI, venv, panels"
+    params: []
+    steps:
+      - cmd: "roadmap --version"
+        output: null
+        required: true
+      - cmd: "roadmap status --json"
+        output: "panel_output/health_status.json"
+        required: true
+    max_duration: 30
+
+# Ops not yet buildable (listed for tracking, not execution):
+# - short-id decide (needs short-ID support in CLI)
+# - deadline-forecast (needs due-date-aware ORION urgency)
+# - list-steps-mission (needs --mission flag in list-steps)
