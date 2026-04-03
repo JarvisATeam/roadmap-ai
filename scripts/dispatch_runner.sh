@@ -6,6 +6,8 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # ── Config ──────────────────────────────────────────────
 REPO_DIR="${ROADMAP_AI_DIR:-$HOME/roadmap-ai}"
 VENV_DIR="${REPO_DIR}/venv"
@@ -15,6 +17,8 @@ RULES_FILE="${REPO_DIR}/DISPATCH_RULES.md"
 MAX_DURATION="${DISPATCH_MAX_DURATION:-120}"
 DATE_STR="$(date +%F)"
 TIMESTAMP="$(date -u +%FT%TZ)"
+
+source "${SCRIPT_DIR}/idempotency.sh"
 
 # ── Colors (degrade gracefully if no tty) ───────────────
 if [ -t 1 ]; then
@@ -424,6 +428,23 @@ main() {
         usage
     fi
 
+    local raw_args="${*:2}"
+    local idem_active=0
+    local idem_key=""
+
+    case "$verb" in
+        standup|forecast|decide|export-panels|closeout)
+            if ! idem_key=$(idem_guard "$verb" "$raw_args"); then
+                log_info "Idempotent replay detected for $verb. Exiting without execution."
+                exit 0
+            fi
+            idem_active=1
+            trap 'idem_mark_failure "$idem_key" "$verb"' ERR
+            ;;
+        *)
+            ;;
+    esac
+
     # Shift past verb to get params
     shift
 
@@ -457,6 +478,11 @@ main() {
             usage
             ;;
     esac
+
+    if [ $idem_active -eq 1 ]; then
+        idem_mark_success "$idem_key" "$verb"
+        trap - ERR
+    fi
 }
 
 main "$@"
