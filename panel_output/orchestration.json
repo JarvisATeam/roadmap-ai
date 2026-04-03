@@ -1,0 +1,34 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-03T18:10:18Z",
+  "command": "orchestration-status",
+  "data": {
+    "queue_depth": {
+      "total": 11,
+      "pending": 2,
+      "proposed": 2,
+      "approved": 5,
+      "running": 0,
+      "blocked": 2,
+      "failed": 0,
+      "done": 0
+    },
+    "by_agent": {
+      "GINIE": 4,
+      "AVA": 0,
+      "CODEX": 5,
+      "DISPATCH": 0,
+      "HUMAN_ONLY": 2
+    },
+    "health": {
+      "last_success": "never",
+      "last_failure": "never",
+      "failure_reason": "",
+      "blocked_count": 2
+    }
+  },
+  "metadata": {
+    "queue_location": "orchestration/queue",
+    "schema_version": "1.0"
+  }
+}
