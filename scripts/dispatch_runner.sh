@@ -20,6 +20,83 @@ TIMESTAMP="$(date -u +%FT%TZ)"
 
 source "${SCRIPT_DIR}/idempotency.sh"
 
+# --- TIMEOUT ENFORCEMENT ---
+get_timeout() {
+    local verb="$1"
+    local default_val="${2:-120}"
+    python3 - "$verb" "$default_val" <<'PY'
+import sys
+verb = sys.argv[1]
+default = int(sys.argv[2])
+current = None
+result = default
+try:
+    with open("dispatch_ops.yaml") as fh:
+        for line in fh:
+            if line.strip() == "ops:":
+                current = None
+                continue
+            if line.startswith("  ") and not line.startswith("    "):
+                label = line.strip().rstrip(":")
+                current = label
+            if current == verb and "max_duration" in line:
+                parts = line.strip().split(":")
+                if len(parts) == 2:
+                    try:
+                        result = int(parts[1].strip())
+                        break
+                    except ValueError:
+                        pass
+except FileNotFoundError:
+    pass
+print(result)
+PY
+}
+
+run_with_timeout() {
+    local verb="$1"
+    shift
+    local override="$1"
+    local max_dur
+    if [[ "$override" =~ ^[0-9]+$ ]]; then
+        max_dur="$override"
+        shift
+    else
+        max_dur=$(get_timeout "$verb" "$MAX_DURATION")
+    fi
+    local exit_code=0
+    if command -v gtimeout >/dev/null 2>&1; then
+        gtimeout --signal=TERM --kill-after=10 "$max_dur" "$@" || exit_code=$?
+    elif command -v timeout >/dev/null 2>&1; then
+        timeout --signal=TERM --kill-after=10 "$max_dur" "$@" || exit_code=$?
+    else
+        "$@" &
+        local pid=$!
+        local elapsed=0
+        while kill -0 "$pid" 2>/dev/null; do
+            sleep 1
+            elapsed=$((elapsed + 1))
+            if [ "$elapsed" -ge "$max_dur" ]; then
+                log_warn "[TIMEOUT] $verb exceeded ${max_dur}s, terminating (pid $pid)"
+                kill -TERM "$pid" 2>/dev/null || true
+                sleep 2
+                kill -KILL "$pid" 2>/dev/null || true
+                wait "$pid" 2>/dev/null || true
+                exit_code=124
+                break
+            fi
+        done
+        if [ "$exit_code" -eq 0 ]; then
+            wait "$pid" 2>/dev/null
+            exit_code=$?
+        fi
+    fi
+    if [ "$exit_code" -eq 124 ]; then
+        write_error_json "$verb" "timeout" "Verb $verb exceeded ${max_dur}s" 124
+    fi
+    return "$exit_code"
+}
+
 # ── Colors (degrade gracefully if no tty) ───────────────
 if [ -t 1 ]; then
     GREEN='\033[0;32m'
@@ -155,18 +232,8 @@ run_step() {
     tmp_err=$(mktemp)
 
     local exit_code=0
-
-    if command -v timeout &>/dev/null; then
-        timeout "$timeout_sec" bash -c "cd '$REPO_DIR' && $cmd" \
-            >"$tmp_out" 2>"$tmp_err" || exit_code=$?
-    elif command -v gtimeout &>/dev/null; then
-        gtimeout "$timeout_sec" bash -c "cd '$REPO_DIR' && $cmd" \
-            >"$tmp_out" 2>"$tmp_err" || exit_code=$?
-    else
-        # No timeout available — run without guard
-        bash -c "cd '$REPO_DIR' && $cmd" \
-            >"$tmp_out" 2>"$tmp_err" || exit_code=$?
-    fi
+    run_with_timeout "$op" "$timeout_sec" bash -c "cd '$REPO_DIR' && $cmd" \
+        >"$tmp_out" 2>"$tmp_err" || exit_code=$?
 
     if [ $exit_code -ne 0 ]; then
         local err_msg
