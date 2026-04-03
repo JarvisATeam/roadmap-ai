@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Smart Next — Dashboard Panel</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--accent:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem}
+h1{font-size:1.6rem;margin-bottom:.5rem}
+h1 span{color:var(--accent)}
+.source{color:var(--muted);font-size:.75rem;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+.card{background:var(--card);border-radius:var(--radius);padding:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.card h2{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+.big{font-size:2.4rem;font-weight:700;line-height:1}
+.sub{color:var(--muted);font-size:.85rem;margin-top:.25rem}
+.factor-row{display:flex;align-items:center;margin:.4rem 0}
+.factor-label{width:130px;font-size:.82rem;color:var(--muted)}
+.factor-track{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.factor-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .5s ease}
+.factor-val{width:50px;text-align:right;font-size:.82rem;font-weight:600}
+.meta-table{width:100%;border-collapse:collapse;margin-top:.5rem}
+.meta-table td{padding:.35rem .5rem;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.meta-table td:first-child{color:var(--muted);width:40%}
+.fallback{text-align:center;padding:3rem 1rem}
+.fallback h2{font-size:1.2rem;margin-bottom:.5rem}
+.fallback p{color:var(--muted);font-size:.9rem}
+.ts{color:var(--muted);font-size:.75rem;margin-top:.3rem}
+.score-color{color:var(--green)}
+.score-medium{color:var(--yellow)}
+.score-low{color:var(--red)}
+footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+#error-banner{display:none;background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red);padding:.75rem 1rem;border-radius:var(--radius);margin-bottom:1rem;font-size:.85rem}
+</style>
+</head>
+<body>
+
+<h1>&#x1F9E0; <span>Smart Next</span></h1>
+<div class="source" id="source-line">Source: panel_output/smart_next.json</div>
+<div id="error-banner"></div>
+<div id="content"></div>
+<footer id="footer">Smart Next v0.4.0 · ASK-P4-001</footer>
+
+<script>
+const DATA_PATH = '../panel_output/smart_next.json';
+const REFRESH_MS = 30000;
+const content = document.getElementById('content');
+const footer = document.getElementById('footer');
+const srcLine = document.getElementById('source-line');
+const errBanner = document.getElementById('error-banner');
+
+function scoreColor(s) {
+  if (s >= 0.7) return 'score-color';
+  if (s >= 0.4) return 'score-medium';
+  return 'score-low';
+}
+
+function fmtTime(iso) {
+  try { return new Date(iso).toLocaleString(); }
+  catch { return iso || 'unknown'; }
+}
+
+function pct(val, max) {
+  return Math.min(100, Math.max(0, (val / max) * 100));
+}
+
+function renderData(json) {
+  errBanner.style.display = 'none';
+  const d = json.data || {};
+  const rec = d.recommendation || {};
+  const factors = rec.factors || {};
+  const meta = json.metadata || {};
+  const ts = json.timestamp || '';
+  const score = rec.score ?? 0;
+
+  const fVals = Object.values(factors);
+  const fMax = Math.max(...fVals, 1);
+
+  srcLine.textContent = 'Source: panel_output/smart_next.json · Updated: ' + fmtTime(ts);
+
+  content.innerHTML = `
+    <div class="grid">
+      <div class="card">
+        <h2>Recommended Next Task</h2>
+        <div class="big ${scoreColor(score)}">${score.toFixed(2)}</div>
+        <div class="sub">ORION composite score · Rank #${rec.rank ?? '?'}</div>
+        <div class="ts">Task: ${rec.task_name || 'unknown'}</div>
+        <table class="meta-table" style="margin-top:1rem">
+          <tr><td>Task ID</td><td style="font-family:monospace;font-size:.7rem">${(rec.task_id || '').substring(0,12)}…</td></tr>
+          <tr><td>Mission ID</td><td style="font-family:monospace;font-size:.7rem">${(rec.mission_id || '').substring(0,12)}…</td></tr>
+          <tr><td>Roadmap ver</td><td>${json.roadmap_version || '?'}</td></tr>
+          <tr><td>Command</td><td>${json.command || '?'}</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>ORION Scoring Factors</h2>
+        ${Object.entries(factors).map(([k, v]) => `
+          <div class="factor-row">
+            <span class="factor-label">${k.replace(/_/g, ' ')}</span>
+            <div class="factor-track">
+              <div class="factor-fill" style="width:${pct(v, fMax)}%"></div>
+            </div>
+            <span class="factor-val">${v}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="card">
+        <h2>Metadata</h2>
+        <table class="meta-table">
+          ${Object.entries(meta).map(([k, v]) => `
+            <tr><td>${k.replace(/_/g, ' ')}</td><td>${v ?? '—'}</td></tr>
+          `).join('')}
+        </table>
+      </div>
+    </div>
+  `;
+
+  footer.textContent = 'Smart Next v0.4.0 · ASK-P4-001 · Last refresh: ' + new Date().toLocaleTimeString();
+}
+
+function renderFallback(reason) {
+  errBanner.style.display = 'block';
+  errBanner.textContent = reason;
+  content.innerHTML = `
+    <div class="card fallback">
+      <h2>Waiting for dispatch data…</h2>
+      <p>Run <code>./scripts/dispatch_runner.sh standup</code> to generate panel data.</p>
+      <div class="ts">Source: panel_output/smart_next.json</div>
+      <div class="ts">Checked: ${new Date().toLocaleString()}</div>
+    </div>
+  `;
+  footer.textContent = 'Smart Next v0.4.0 · ASK-P4-001 · No data';
+}
+
+async function load() {
+  try {
+    const resp = await fetch(DATA_PATH, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    let json;
+    try { json = JSON.parse(text); }
+    catch (e) { throw new Error('Invalid JSON: ' + e.message); }
+    if (!json.data || !json.data.recommendation) {
+      throw new Error('Missing data.recommendation in JSON');
+    }
+    renderData(json);
+  } catch (err) {
+    renderFallback(err.message);
+  }
+}
+
+load();
+setInterval(load, REFRESH_MS);
+</script>
+</body>
+</html>
