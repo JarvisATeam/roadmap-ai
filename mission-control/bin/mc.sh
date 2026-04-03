@@ -21,6 +21,7 @@ Usage:
   ./bin/mc.sh selftest
   ./bin/mc.sh logs [mc|dispatch|errors] [--tail] [--lines N]
   ./bin/mc.sh snapshot [--export <file>] [--import <file>] [--compare <file1> <file2>]
+  ./bin/mc.sh handover [--commit] [--export <file>]
   ./bin/mc.sh help
 
 Commands:
@@ -36,6 +37,7 @@ Commands:
   archive    Move mission to archive
   restore    Restore mission from archive
   list       List missions (archived)
+  handover   Generate project handover report
   help       Show this help
 USAGE
 }
@@ -279,6 +281,10 @@ case "$cmd" in
   list)
     shift
     exec "$ROOT/bin/archive.sh" list "$@"
+    ;;
+  handover)
+    shift
+    exec "$ROOT/bin/handover.sh" "$@"
     ;;
   new)
     shift
