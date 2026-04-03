@@ -1,33 +1,28 @@
-# HANDOVER — Roadmap-AI × Mission-Control
+# HANDOVER — Roadmap-AI
 Date: 2026-04-03
-Last verified HEAD: 88fe3ba
-Environment: MAC
-Status: P0-P4 COMPLETE ✅
+HEAD: b976e9d
+Status: P0-P5 COMPLETE
 
-## COMPLETED PHASES
+## COMPLETED
+- P0: Dispatch V1 (local verified)
+- P1: Mission-Control CLI (15+ commands)
+- P2: Roadmap Core (ORION, short IDs, JSON envelopes)
+- P3: Dispatch V2 (idempotency, error handling, wake/sleep)
+- P4: Dashboard UI (6 panels, 936+ LOC, zero hardcoded data)
+- P5: Agent Orchestration (schemas, queue, router, approval, proof)
 
-### P0 — Dispatch V1 ✅
-Local dispatch verified (health + standup green)
+## ARCHITECTURE
+Roadmap CLI -> Dispatch Runner -> panel_output/*.json -> Dashboard
+Queue Manager -> Approval Gate -> Enhanced Router -> Execute With Proof
 
-### P1 — Mission-Control ✅
-Full CLI framework with 15+ commands
-
-### P2 — Roadmap-AI Core ✅
-Short IDs, ORION urgency, JSON envelopes
-
-### P3 — Dispatch V2 ✅
-Idempotency, error handling, wake/sleep
-
-### P4 — Dashboard UI ✅
-5 panels: Smart Next, Risk Summary, Progress, Decisions, Forecast
-936 lines, zero hardcoded data, graceful degradation
-
-## NEXT: P5 — Agent Orchestration
-
-Agent contracts, verb ownership, parallel lanes
+## AGENTS
+- GINIE: propose (auto-approved)
+- AVA: validate/approve (auto-approved)
+- CODEX: execute (requires priority>=4 or manual approval)
+- HUMAN_ONLY: blocked (always requires human)
 
 ## BLOCKERS
 - P0 live: awaiting cowork endpoint + token
-- Forecast: dispatch format mismatch (workaround exists)
+- Forecast dispatch: format mismatch (workaround exists)
 
-**Status: READY FOR P5 🚀**
+## NEXT: P6 — Integrations
