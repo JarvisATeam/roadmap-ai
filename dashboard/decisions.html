@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Decisions — Dashboard Panel</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--accent:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem}
+h1{font-size:1.6rem;margin-bottom:.5rem}
+h1 span{color:var(--accent)}
+.source{color:var(--muted);font-size:.75rem;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem}
+.card{background:var(--card);border-radius:var(--radius);padding:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.card h2{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+.big{font-size:2.4rem;font-weight:700;line-height:1}
+.sub{color:var(--muted);font-size:.85rem;margin-top:.25rem}
+.decision-list{margin-top:1rem}
+.decision-item{background:rgba(255,255,255,.03);border-radius:8px;padding:1rem;margin:.75rem 0;border-left:3px solid var(--accent)}
+.decision-item.approved{border-left-color:var(--green)}
+.decision-item.rejected{border-left-color:var(--red)}
+.decision-item.deferred{border-left-color:var(--yellow)}
+.decision-step{font-weight:600;font-size:.9rem;margin-bottom:.25rem}
+.decision-step-id{color:var(--muted);font-size:.75rem;font-family:monospace;margin-bottom:.5rem}
+.decision-outcome{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.75rem;font-weight:600;margin-bottom:.5rem}
+.decision-outcome.approved{background:rgba(34,197,94,.15);color:var(--green)}
+.decision-outcome.rejected{background:rgba(239,68,68,.15);color:var(--red)}
+.decision-outcome.deferred{background:rgba(250,204,21,.15);color:var(--yellow)}
+.decision-reason{color:var(--muted);font-size:.85rem;line-height:1.4;margin-top:.5rem}
+.decision-timestamp{color:var(--muted);font-size:.75rem;margin-top:.5rem}
+.meta-table{width:100%;border-collapse:collapse;margin-top:.5rem}
+.meta-table td{padding:.35rem .5rem;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.meta-table td:first-child{color:var(--muted);width:50%}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.empty-state h3{font-size:1.1rem;margin-bottom:.5rem}
+.empty-state p{font-size:.9rem}
+.fallback{text-align:center;padding:3rem 1rem}
+.fallback h2{font-size:1.2rem;margin-bottom:.5rem}
+.fallback p{color:var(--muted);font-size:.9rem}
+.ts{color:var(--muted);font-size:.75rem;margin-top:.3rem}
+footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+#error-banner{display:none;background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red);padding:.75rem 1rem;border-radius:var(--radius);margin-bottom:1rem;font-size:.85rem}
+</style>
+</head>
+<body>
+
+<h1>⚖️ <span>Decisions</span></h1>
+<div class="source" id="source-line">Source: panel_output/decisions.json</div>
+<div id="error-banner"></div>
+<div id="content"></div>
+<footer id="footer">Decisions v0.4.0 · ASK-P4-004</footer>
+
+<script>
+const DATA_PATH = '../panel_output/decisions.json';
+const REFRESH_MS = 30000;
+const content = document.getElementById('content');
+const footer = document.getElementById('footer');
+const srcLine = document.getElementById('source-line');
+const errBanner = document.getElementById('error-banner');
+
+function fmtTime(iso) {
+  try { return new Date(iso).toLocaleString(); }
+  catch { return iso || 'unknown'; }
+}
+
+function renderData(json) {
+  errBanner.style.display = 'none';
+  const d = json.data || {};
+  const decisions = d.decisions || [];
+  const count = d.count ?? decisions.length;
+  const meta = json.metadata || {};
+  const ts = json.timestamp || '';
+
+  srcLine.textContent = 'Source: panel_output/decisions.json · Updated: ' + fmtTime(ts);
+
+  let decisionsHtml = '';
+  if (decisions.length > 0) {
+    decisionsHtml = `
+      <div class="card">
+        <h2>Recent Decisions (${count})</h2>
+        <div class="decision-list">
+          ${decisions.map(dec => `
+            <div class="decision-item ${dec.outcome || 'approved'}">
+              <div class="decision-step">${dec.step_description || 'Unknown step'}</div>
+              <div class="decision-step-id">${dec.step_id ? dec.step_id.substring(0, 12) + '…' : ''}</div>
+              <span class="decision-outcome ${dec.outcome || 'approved'}">${(dec.outcome || 'approved').toUpperCase()}</span>
+              ${dec.reason ? `<div class="decision-reason">${dec.reason}</div>` : ''}
+              <div class="decision-timestamp">${fmtTime(dec.timestamp || dec.decided_at)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  } else {
+    decisionsHtml = `
+      <div class="card">
+        <h2>Recent Decisions (0)</h2>
+        <div class="empty-state">
+          <h3>📋 No decisions yet</h3>
+          <p>Run <code>roadmap decide &lt;task-id&gt;</code> to log decisions</p>
+        </div>
+      </div>
+    `;
+  }
+
+  content.innerHTML = `
+    <div class="grid">
+      <div class="card">
+        <h2>Decision Summary</h2>
+        <div class="big" style="color:var(--accent)">${count}</div>
+        <div class="sub">Total decisions logged</div>
+        <table class="meta-table" style="margin-top:1rem">
+          <tr><td>Missions count</td><td>${meta.missions_count ?? 0}</td></tr>
+          <tr><td>Steps total</td><td>${meta.steps_total ?? 0}</td></tr>
+          <tr><td>Steps completed</td><td>${meta.steps_completed ?? 0}</td></tr>
+          <tr><td>Steps remaining</td><td>${meta.steps_remaining ?? 0}</td></tr>
+          <tr><td>Filter step</td><td>${meta.filter_step || 'none'}</td></tr>
+          <tr><td>Limit</td><td>${meta.limit || 'none'}</td></tr>
+        </table>
+      </div>
+
+      ${decisionsHtml}
+
+      <div class="card">
+        <h2>Metadata</h2>
+        <table class="meta-table">
+          <tr><td>Roadmap version</td><td>${json.roadmap_version || '?'}</td></tr>
+          <tr><td>Command</td><td>${json.command || '?'}</td></tr>
+          <tr><td>Timestamp</td><td style="font-size:.75rem">${fmtTime(ts)}</td></tr>
+        </table>
+      </div>
+    </div>
+  `;
+
+  footer.textContent = 'Decisions v0.4.0 · ASK-P4-004 · Last refresh: ' + new Date().toLocaleTimeString();
+}
+
+function renderFallback(reason) {
+  errBanner.style.display = 'block';
+  errBanner.textContent = reason;
+  content.innerHTML = `
+    <div class="card fallback">
+      <h2>Waiting for decisions data…</h2>
+      <p>Run <code>./scripts/dispatch_runner.sh standup</code> to generate panel data.</p>
+      <div class="ts">Source: panel_output/decisions.json</div>
+      <div class="ts">Checked: ${new Date().toLocaleString()}</div>
+    </div>
+  `;
+  footer.textContent = 'Decisions v0.4.0 · ASK-P4-004 · No data';
+}
+
+async function load() {
+  try {
+    const resp = await fetch(DATA_PATH, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    let json;
+    try { json = JSON.parse(text); }
+    catch (e) { throw new Error('Invalid JSON: ' + e.message); }
+    if (!json.data) {
+      throw new Error('Missing data object in JSON');
+    }
+    renderData(json);
+  } catch (err) {
+    renderFallback(err.message);
+  }
+}
+
+load();
+setInterval(load, REFRESH_MS);
+</script>
+</body>
+</html>
