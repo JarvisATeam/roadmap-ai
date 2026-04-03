@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Control v2.4</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'SF Mono', Monaco, monospace; background: #0a0a0a; color: #0f0; display: flex; flex-direction: column; height: 100vh; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #111; border-bottom: 2px solid #0f0; }
+    .topbar h1 { font-size: 18px; text-shadow: 0 0 10px #0f0; }
+    .topbar-right { display: flex; gap: 10px; align-items: center; }
+    .status-pill { padding: 4px 12px; border-radius: 12px; font-size: 12px; background: #0f0; color: #000; }
+    .refresh-btn { background: #0a0a0a; border: 1px solid #0f0; color: #0f0; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
+    .refresh-btn:hover { background: #0f0; color: #000; }
+    .main { display: flex; flex: 1; overflow: hidden; }
+    .left { flex: 1; overflow-y: auto; padding: 15px; }
+    .right { width: 400px; background: #111; border-left: 2px solid #0f0; display: flex; flex-direction: column; }
+    .quick-ops { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+    .quick-ops button { padding: 8px 14px; font-size: 12px; background: #0a0a0a; border: 1px solid #0f0; color: #0f0; cursor: pointer; border-radius: 4px; }
+    .quick-ops button:hover { background: #0f0; color: #000; }
+    .project-strip { background: #1a1a1a; border: 2px solid #0f0; border-radius: 8px; padding: 12px; margin-bottom: 15px; }
+    .project-strip.critical { border-color: #f00; }
+    .project-strip.active { border-color: #ff0; }
+    .project-strip.healthy { border-color: #0f0; }
+    .project-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .project-title { font-size: 16px; font-weight: bold; }
+    .project-summary { display: flex; gap: 15px; font-size: 11px; opacity: 0.8; }
+    .project-summary span { display: flex; align-items: center; gap: 4px; }
+    .windows-list { display: flex; flex-direction: column; gap: 8px; }
+    .window-card { background: #0a0a0a; border: 1px solid #333; border-radius: 4px; padding: 10px; cursor: pointer; transition: all 0.2s; }
+    .window-card:hover { border-color: #0f0; transform: translateX(4px); }
+    .window-card.critical { border-color: #f00; background: #1a0000; }
+    .window-card.active { border-color: #ff0; background: #1a1a00; }
+    .window-card.healthy { border-color: #0f0; background: #001a00; }
+    .window-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .window-id { font-size: 13px; font-weight: bold; }
+    .window-cmd { font-size: 10px; opacity: 0.6; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .output-header { padding: 10px; border-bottom: 1px solid #333; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .output-body { flex: 1; overflow-y: auto; padding: 10px; font-size: 11px; white-space: pre-wrap; background: #000; }
+    .widgets { display: flex; gap: 10px; padding: 10px; border-top: 1px solid #333; font-size: 11px; }
+    .widget { flex: 1; text-align: center; }
+    .widget-label { font-size: 9px; opacity: 0.6; }
+    .widget-value { margin-top: 3px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: #111; border: 2px solid #0f0; border-radius: 8px; padding: 20px; max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #333; }
+    .modal-title { font-size: 18px; font-weight: bold; }
+    .modal-close { background: #f00; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
+    .modal-close:hover { background: #ff3333; }
+    .detail-section { margin-bottom: 15px; }
+    .detail-section h3 { font-size: 14px; margin-bottom: 8px; color: #0f0; border-bottom: 1px solid #333; padding-bottom: 4px; }
+    .detail-grid { display: grid; grid-template-columns: 140px 1fr 80px; gap: 8px; font-size: 12px; }
+    .detail-label { opacity: 0.6; }
+    .detail-value { color: #0f0; }
+    .detail-source { opacity: 0.5; font-size: 10px; text-align: right; }
+    .detail-source.live { color: #0f0; }
+    .detail-source.cached { color: #ff0; }
+    .detail-source.unknown { color: #666; }
+    .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .detail-actions button { padding: 8px 16px; font-size: 12px; background: #0a0a0a; border: 1px solid #0f0; color: #0f0; cursor: pointer; border-radius: 4px; }
+    .detail-actions button:hover:not(:disabled) { background: #0f0; color: #000; }
+    .detail-actions button:disabled { opacity: 0.3; cursor: not-allowed; border-color: #333; color: #666; }
+    .memory-box { background: #0a0a0a; border: 1px solid #333; border-radius: 4px; padding: 10px; font-size: 11px; word-wrap: break-word; }
+    .analysis-box { background: #001a00; border: 1px solid #0f0; border-radius: 4px; padding: 12px; margin-top: 10px; }
+    .analysis-box.warning { background: #1a1a00; border-color: #ff0; }
+    .analysis-box.error { background: #1a0000; border-color: #f00; }
+    .suggestion { background: #0a0a0a; border-left: 3px solid #0f0; padding: 8px; margin-bottom: 8px; font-size: 11px; }
+    .suggestion.high { border-color: #f00; }
+    .suggestion.medium { border-color: #ff0; }
+    .suggestion.low { border-color: #0f0; }
+    .suggestion-priority { font-weight: bold; margin-bottom: 4px; }
+    .suggestion-desc { opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>🚀 MISSION CONTROL v2.4</h1>
+    <div class="topbar-right">
+      <span class="status-pill" id="global-status">LIVE</span>
+      <button class="refresh-btn" onclick="refreshAll()">⟳ Refresh</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="left">
+      <h2 style="margin-bottom:10px;font-size:14px;">🪟 ACTIVE WINDOWS</h2>
+      <div class="quick-ops">
+        <button onclick="runAction('mission.status')">📊 Status</button>
+        <button onclick="showLocked()">🔒 Show Locked</button>
+        <button onclick="runAction('mission.closeout')">🔐 Closeout</button>
+        <button onclick="refreshAll()">🔄 Refresh</button>
+      </div>
+      <div id="windows-container"></div>
+    </div>
+    <div class="right">
+      <div class="output-header"><span>OUTPUT</span><button class="refresh-btn" style="padding:4px 8px;font-size:10px;" onclick="document.getElementById('output').textContent='[Cleared]'">Clear</button></div>
+      <div class="output-body" id="output">[Ready]</div>
+      <div class="widgets">
+        <div class="widget"><div class="widget-label">CLOUDBOT</div><div class="widget-value" id="w-cloudbot">...</div></div>
+        <div class="widget"><div class="widget-label">WINDOWS</div><div class="widget-value" id="w-windows">...</div></div>
+        <div class="widget"><div class="widget-label">LOCKED</div><div class="widget-value" id="w-locked">...</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="window-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Window Detail</div>
+        <button class="modal-close" onclick="closeModal()">✕ Close</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+  <script>
+    let windowsData={}, currentWindow=null, currentAnalysis=null;
+    async function loadWindows(){
+      const r=await fetch('/windows');
+      windowsData=await r.json();
+      renderWindows();
+      updateStatus();
+    }
+    function renderWindows(){
+      const c=document.getElementById('windows-container');
+      c.innerHTML='';
+      Object.entries(windowsData.byProject||{}).forEach(([proj,wins])=>{
+        const locked=wins.filter(w=>w.locked).length;
+        const critical=wins.some(w=>w.locked);
+        const cls=critical?'critical':(locked?'active':'healthy');
+        let html=`<div class="project-strip ${cls}">
+          <div class="project-header">
+            <div class="project-title">${proj.toUpperCase()}</div>
+            <div class="project-summary">
+              <span>🪟 ${wins.length}</span>
+              <span>🔒 ${locked}</span>
+            </div>
+          </div>
+          <div class="windows-list">`;
+        wins.forEach(w=>{
+          const wCls=w.health==='green'?'healthy':(w.health==='red'?'critical':'active');
+          const lock=w.locked?'🔒':'🔓';
+          const healthIcon=w.health==='green'?'🟢':(w.health==='red'?'🔴':'🟡');
+          const cmdPreview=(w.cmd||'unknown').substring(0,60);
+          html+=`<div class="window-card ${wCls}" onclick="showWindowDetail('${w.id}')">
+            <div class="window-header">
+              <div class="window-id">${lock} ${healthIcon} ${w.id}</div>
+              <div>${w.type||'?'}</div>
+            </div>
+            <div class="window-cmd">${cmdPreview}...</div>
+          </div>`;
+        });
+        html+=`</div></div>`;
+        c.innerHTML+=html;
+      });
+    }
+    function src(source){
+      if(!source||source==='unknown')return'<span class="detail-source unknown">unknown</span>';
+      if(source==='live')return'<span class="detail-source live">live</span>';
+      if(source==='cached')return'<span class="detail-source cached">cached</span>';
+      return'<span class="detail-source">'+source+'</span>';
+    }
+    async function showWindowDetail(id){
+      const r=await fetch('/windows/'+id);
+      const w=await r.json();
+      currentWindow=w;
+      currentAnalysis=null;
+      document.getElementById('modal-title').textContent=w.id+' - Detail';
+      const watching=w.memory?.watch_active;
+      document.getElementById('modal-body').innerHTML=`
+        <div class="detail-section">
+          <h3>Window Info</h3>
+          <div class="detail-grid">
+            <div class="detail-label">ID:</div><div class="detail-value">${w.id}</div>${src('live')}
+            <div class="detail-label">Project:</div><div class="detail-value">${w.project||'unknown'}</div>${src('live')}
+            <div class="detail-label">Title:</div><div class="detail-value">${w.title||'unknown'}</div>${src('live')}
+            <div class="detail-label">Type:</div><div class="detail-value">${w.type||'unknown'}</div>${src('live')}
+            <div class="detail-label">Env:</div><div class="detail-value">${w.env||'unknown'}</div>${src(w.env_source)}
+            <div class="detail-label">CWD:</div><div class="detail-value">${w.cwd||'unknown'}</div>${src('live')}
+            <div class="detail-label">Criticality:</div><div class="detail-value">${w.criticality||'unknown'}</div>${src('live')}
+            <div class="detail-label">Locked:</div><div class="detail-value">${w.locked?'YES':'NO'}</div>${src('live')}
+            <div class="detail-label">Safe Close:</div><div class="detail-value">${w.safe_close?'YES':'NO'}</div>${src(w.safe_source)}
+            <div class="detail-label">Health:</div><div class="detail-value">${w.health}</div>${src(w.health_source)}
+            <div class="detail-label">State:</div><div class="detail-value">${w.state||'unknown'}</div>${src('live')}
+            <div class="detail-label">Reason:</div><div class="detail-value">${w.reason||'unknown'}</div>${src(w.reason_source)}
+            <div class="detail-label">NTA:</div><div class="detail-value">${w.nta||'none'}</div>${src('live')}
+          </div>
+        </div>
+        <div class="detail-section">
+          <h3>Command ${src(w.cmd_source)}</h3>
+          <div class="memory-box">${w.cmd||'unknown'}</div>
+        </div>
+        <div class="detail-section">
+          <h3>Memory</h3>
+          <div class="detail-grid">
+            <div class="detail-label">Last Action:</div><div class="detail-value">${w.memory?.last_action||'unknown'}</div>${src('memory')}
+            <div class="detail-label">Last Status:</div><div class="detail-value">${w.memory?.last_status||'unknown'}</div>${src('memory')}
+            <div class="detail-label">Last Error:</div><div class="detail-value">${w.memory?.last_error||'none'}</div>${src('memory')}
+            <div class="detail-label">Next Step:</div><div class="detail-value">${w.memory?.recommended_next_step||'unknown'}</div>${src('memory')}
+            <div class="detail-label">Golden Path:</div><div class="detail-value">${w.memory?.golden_path?'YES':'NO'}</div>${src('memory')}
+            <div class="detail-label">Watch Active:</div><div class="detail-value">${watching?'YES':'NO'}</div>${src('memory')}
+          </div>
+          ${w.memory?.notes?`<div style="margin-top:10px;"><strong>Notes:</strong><div class="memory-box">${w.memory.notes}</div></div>`:''}
+        </div>
+        <div class="detail-section" id="analysis-section" style="display:none;">
+          <h3>Analysis</h3>
+          <div id="analysis-container"></div>
+        </div>
+        <div class="detail-section">
+          <h3>Actions</h3>
+          <div class="detail-actions">
+            <button onclick="toggleWatch()">👁 ${watching?'Unwatch':'Watch'}</button>
+            <button onclick="analyzeWindow()">🔍 Analyze</button>
+            <button onclick="selectForWatch()">📹 Select for Watch</button>
+            <button disabled title="Hook pending">➡️ Next Step</button>
+            <button onclick="updateMemory()">💾 Update Memory</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('window-modal').classList.add('active');
+    }
+    function closeModal(){
+      document.getElementById('window-modal').classList.remove('active');
+      currentWindow=null;
+      currentAnalysis=null;
+    }
+    async function analyzeWindow(){
+      if(!currentWindow)return;
+      const o=document.getElementById('output');
+      o.textContent='[Analyzing window...]\n';
+      try{
+        const r=await fetch(`/windows/${currentWindow.id}/analyze`,{method:'POST'});
+        const d=await r.json();
+        if(d.ok){
+          currentAnalysis=d.analysis;
+          displayAnalysis(d.analysis);
+          o.textContent='[Analysis complete]\n\n'+JSON.stringify(d.analysis,null,2);
+        }else{
+          o.textContent='[Analysis failed]\n\n'+d.error;
+        }
+      }catch(e){
+        o.textContent='[ERROR] '+e.message;
+      }
+    }
+    function displayAnalysis(a){
+      const section=document.getElementById('analysis-section');
+      const container=document.getElementById('analysis-container');
+      section.style.display='block';
+      let html=`<div class="analysis-box">
+        <strong>Analyzed at:</strong> ${new Date(a.analyzed_at).toLocaleString()}<br>
+        <strong>Health:</strong> ${a.health_check.status} (Risk: ${a.health_check.risk_level})<br>
+        <strong>Metadata:</strong> ${a.metadata_check.completeness}% complete<br>
+        <strong>Confidence:</strong> ${a.confidence}
+      </div>`;
+      if(a.health_check.issues.length>0){
+        html+=`<div class="analysis-box warning"><strong>Issues:</strong><ul>`;
+        a.health_check.issues.forEach(i=>html+=`<li>${i}</li>`);
+        html+=`</ul></div>`;
+      }
+      if(a.suggested_actions.length>0){
+        html+=`<div style="margin-top:10px;"><strong>Suggested Actions:</strong></div>`;
+        a.suggested_actions.forEach(s=>{
+          html+=`<div class="suggestion ${s.priority}">
+            <div class="suggestion-priority">⚡ ${s.priority.toUpperCase()}: ${s.action}</div>
+            <div class="suggestion-desc">${s.description}</div>
+            ${s.command?`<div style="margin-top:4px;opacity:0.7;">Command: <code>${s.command}</code></div>`:''}
+          </div>`;
+        });
+      }
+      container.innerHTML=html;
+    }
+    async function toggleWatch(){
+      if(!currentWindow)return;
+      const watching=currentWindow.memory?.watch_active;
+      const endpoint=watching?'/watch/stop':'/watch/start';
+      const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({window_id:currentWindow.id})});
+      const d=await r.json();
+      document.getElementById('output').textContent=JSON.stringify(d,null,2);
+      closeModal();
+      loadWindows();
+    }
+        async function selectForWatch(){
+      if(!currentWindow)return;
+      const r=await fetch('/watch/select',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({window_id:currentWindow.id})});
+      const d=await r.json();
+      document.getElementById('output').textContent='[Watch Selected]\n\n'+JSON.stringify(d,null,2);
+      alert('Watch loop started for '+currentWindow.id+'\n\nWill monitor for changes every 3 seconds.');
+      closeModal();
+    }
+    async function deselectWatch(){
+      const r=await fetch('/watch/deselect',{method:'POST'});
+      const d=await r.json();
+      document.getElementById('output').textContent='[Watch Deselected]\n\n'+JSON.stringify(d,null,2);
+    }
+    async function updateMemory(){
+      const notes=prompt('Notes:',currentWindow.memory?.notes||'');
+      if(notes===null)return;
+      const r=await fetch('/window-memory/'+currentWindow.id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({notes})});
+      const d=await r.json();
+      document.getElementById('output').textContent=JSON.stringify(d,null,2);
+      closeModal();
+      loadWindows();
+    }
+    async function runAction(id){
+      const o=document.getElementById('output');
+      o.textContent=`[Running: ${id}...]\n`;
+      try{
+        const r=await fetch('/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action_id:id})});
+        const d=await r.json();
+        o.textContent=`[${d.ok?'✅':'❌'} ${id}]\n\n${d.output}`;
+      }catch(e){o.textContent=`[ERROR] ${e.message}`;}
+    }
+    async function updateStatus(){
+      try{
+        const r=await fetch('/status');const d=await r.json();
+        document.getElementById('w-cloudbot').textContent=d.cloudbot?'🟢':'🔴';
+        document.getElementById('w-windows').textContent=d.windows||0;
+        document.getElementById('w-locked').textContent=d.locked||0;
+      }catch(e){}
+    }
+    function showLocked(){
+      const locked=windowsData.windows.filter(w=>w.locked);
+      document.getElementById('output').textContent=`LOCKED WINDOWS (${locked.length}):\n\n`+locked.map(w=>`${w.id} - ${w.project}`).join('\n');
+    }
+    function refreshAll(){loadWindows();}
+    setInterval(updateStatus,10000);
+    loadWindows();
+  </script>
+</body>
+</html>

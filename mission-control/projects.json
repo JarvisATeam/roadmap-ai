@@ -1,0 +1,34 @@
+{
+  "giniesystem": {
+    "id": "giniesystem",
+    "label": "GinieSystem",
+    "path": "~/GinieSystem",
+    "status": "active",
+    "favorite": true,
+    "actions": ["project.giniesystem.open", "git.proof.current", "git.status.current"]
+  },
+  "missioncontrol": {
+    "id": "missioncontrol",
+    "label": "Mission Control",
+    "path": "~/mission-control",
+    "status": "active",
+    "favorite": true,
+    "actions": ["project.missioncontrol.open", "handover.generate", "handover.archive"]
+  },
+  "aimigobot": {
+    "id": "aimigobot",
+    "label": "AImigoBot",
+    "path": "/home/aimigo/AImigoBot",
+    "status": "remote",
+    "favorite": false,
+    "actions": []
+  },
+  "roadmapai": {
+    "id": "roadmapai",
+    "label": "RoadmapAI",
+    "path": "~/roadmap_ai",
+    "status": "inactive",
+    "favorite": false,
+    "actions": []
+  }
+}

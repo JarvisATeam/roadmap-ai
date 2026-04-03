@@ -1,0 +1,36 @@
+name: Mission Control CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  mission-control:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Bootstrap Mission Control
+        run: ./scripts/bootstrap_mission_control.sh --skip-launchagent
+
+      - name: Run mc selftest
+        run: ./scripts/selftest_mission_control.sh
+
+      - name: Run mc doctor (JSON)
+        run: ./bin/mc.sh doctor --json
+
+      - name: Export mission snapshot
+        run: ./bin/mc.sh snapshot --export ci-snapshot.txt
+
+      - name: Upload snapshot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mission-control-snapshot
+          path: ci-snapshot.txt
+          if-no-files-found: error

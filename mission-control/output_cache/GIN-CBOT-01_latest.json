@@ -1,0 +1,8 @@
+{
+  "window_id": "GIN-CBOT-01",
+  "captured_at": "2026-03-29T21:25:44.097Z",
+  "method": "placeholder",
+  "content": "Output capture requires screen recording permission\n\nMetadata available:\n{\n  \"id\": \"GIN-CBOT-01\",\n  \"project\": \"giniesystem\",\n  \"title\": \"GinieSystem — PYTHONPATH=~/GinieSystem python3 -m cloudbot.main — Python -m cloudbot.main — 100×24\",\n  \"cmd\": \"PYTHONPATH=~/GinieSystem python3 -m cloudbot.main\",\n  \"cmd_source\": \"live\",\n  \"type\": \"service\",\n  \"env\": \"mac\",\n  \"env_source\": \"live\",\n  \"cwd\": \"~/GinieSystem\",\n  \"criticality\": \"critical\",\n  \"locked\": true,\n  \"safe_close\": false,\n  \"safe_source\": \"live\",\n  \"reason\": \"Aktiv lokal cloudbot-runtime\",\n  \"reason_source\": \"live\",\n  \"state\": \"running\",\n  \"nta\": \"cloudbot_health\",\n  \"registered_at\": \"2026-03-29T13:20:20.679184\",\n  \"health\": \"green\",\n  \"health_source\": \"derived\",\n  \"memory\": {\n    \"window_id\": \"GIN-CBOT-01\",\n    \"last_action\": null,\n    \"last_status\": \"green\",\n    \"last_error\": null,\n    \"recommended_next_step\": \"unknown\",\n    \"golden_path\": true,\n    \"notes\": \"Critical cloudbot runtime\",\n    \"watch_active\": true,\n    \"updated_at\": \"2026-03-29T18:44:51.217Z\"\n  }\n}",
+  "lines": [],
+  "error": "Screen recording permission not configured"
+}

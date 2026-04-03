@@ -1,0 +1,143 @@
+{
+  "handover.generate": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl handover generate",
+    "desc": "Generate handover",
+    "category": "handover",
+    "label": "Generate Handover",
+    "aliases": ["generate handover", "new handover"],
+    "enabled": true
+  },
+  "handover.archive": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl handover archive",
+    "desc": "Archive handover",
+    "category": "handover",
+    "label": "Archive Handover",
+    "aliases": ["archive", "save handover"],
+    "enabled": true
+  },
+  "handover.status": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl handover status",
+    "desc": "Handover status",
+    "category": "handover",
+    "label": "Handover Status",
+    "aliases": ["handover status", "check handover"],
+    "enabled": true
+  },
+  "monitor.heartbeat": {
+    "cmd": "tail -5 ~/.ginie/heartbeat.log",
+    "desc": "Last 5 heartbeats",
+    "category": "monitor",
+    "label": "Heartbeat",
+    "aliases": ["heartbeat", "check heartbeat"],
+    "enabled": true
+  },
+  "monitor.cloudbot": {
+    "cmd": "ps aux | grep cloudbot.main | grep -v grep",
+    "desc": "Cloudbot status",
+    "category": "monitor",
+    "label": "Cloudbot Status",
+    "aliases": ["cloudbot", "check cloudbot"],
+    "enabled": true
+  },
+  "mission.status": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl status",
+    "desc": "Full window status",
+    "category": "mission",
+    "label": "Mission Status",
+    "aliases": ["status", "mission status", "show windows"],
+    "enabled": true
+  },
+  "mission.closeout": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl closeout",
+    "desc": "Closeout assistant",
+    "category": "mission",
+    "label": "Closeout",
+    "aliases": ["closeout", "close session"],
+    "enabled": true
+  },
+  "project.giniesystem.open": {
+    "cmd": "echo 'cd ~/GinieSystem'",
+    "desc": "Open GinieSystem project",
+    "category": "project",
+    "label": "Open GinieSystem",
+    "aliases": ["open ginie", "ginie system"],
+    "enabled": false,
+    "hook": "pending"
+  },
+  "project.missioncontrol.open": {
+    "cmd": "echo 'cd ~/mission-control'",
+    "desc": "Open Mission Control project",
+    "category": "project",
+    "label": "Open Mission Control",
+    "aliases": ["open mission control"],
+    "enabled": false,
+    "hook": "pending"
+  },
+  "project.current.handover": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl handover generate",
+    "desc": "Generate handover for current project",
+    "category": "project",
+    "label": "Project Handover",
+    "aliases": ["project handover"],
+    "enabled": true
+  },
+  "git.proof.current": {
+    "cmd": "cd ~/GinieSystem && git log --oneline -5",
+    "desc": "Show Git proof for current project",
+    "category": "git",
+    "label": "Git Proof",
+    "aliases": ["git proof", "proof", "show proof"],
+    "enabled": true
+  },
+  "git.status.current": {
+    "cmd": "cd ~/GinieSystem && git status --short",
+    "desc": "Git status",
+    "category": "git",
+    "label": "Git Status",
+    "aliases": ["git status"],
+    "enabled": true
+  },
+  "git.diff.current": {
+    "cmd": "cd ~/GinieSystem && git diff --stat",
+    "desc": "Git diff summary",
+    "category": "git",
+    "label": "Git Diff",
+    "aliases": ["git diff", "show changes"],
+    "enabled": true
+  },
+  "windows.list": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl status",
+    "desc": "List all windows",
+    "category": "windows",
+    "label": "List Windows",
+    "aliases": ["list windows", "show windows"],
+    "enabled": true
+  },
+  "windows.locked": {
+    "cmd": "~/.ginie/mission-control/scripts/missionctl locked",
+    "desc": "Show locked windows",
+    "category": "windows",
+    "label": "Locked Windows",
+    "aliases": ["locked windows", "critical windows"],
+    "enabled": false,
+    "hook": "pending"
+  },
+  "ai.watch.current_window": {
+    "cmd": "echo 'AI screen watch hook - not implemented'",
+    "desc": "Watch current window with AI",
+    "category": "ai",
+    "label": "AI Watch Window",
+    "aliases": ["watch window", "ai watch"],
+    "enabled": false,
+    "hook": "pending"
+  },
+  "ai.debug.next_step": {
+    "cmd": "echo 'AI debug copilot hook - not implemented'",
+    "desc": "AI suggests next debugging step",
+    "category": "ai",
+    "label": "AI Next Step",
+    "aliases": ["next step", "what next"],
+    "enabled": false,
+    "hook": "pending"
+  }
+}

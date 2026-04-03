@@ -1,0 +1,7 @@
+{
+  "active_window": "AIM-ORCH-01",
+  "last_hash": "e65453bb67825240f80b537e354199f251b0c749",
+  "last_output": "\n================================================================================\nMISSION CONTROL — WINDOW STATUS\n================================================================================\n\n📦 AIMIGO\n--------------------------------------------------------------------------------\n\n🔒 🟢 AIM-ORCH-01 — roadmapai — aimigo@aimigo: ~/AImigoBot/app — ssh aimigo@100.97.199.60 \n   Type: watcher      | Env: jetson | Crit: critical\n   Safe: ⚠️ no                 | Why: Live overvåkning av orchestrat",
+  "watching": true,
+  "updated_at": "2026-03-30T04:04:47.015Z"
+}

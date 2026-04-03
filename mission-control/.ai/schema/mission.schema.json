@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MissionFile",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{3}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "completed", "backlog"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["kritisk", "høy", "medium", "lav"]
+    },
+    "started": {
+      "type": "string",
+      "format": "date"
+    },
+    "goals": {
+      "type": "string"
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "done": { "type": "boolean" }
+        },
+        "required": ["title", "done"]
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["id", "name", "status", "priority", "started"]
+}

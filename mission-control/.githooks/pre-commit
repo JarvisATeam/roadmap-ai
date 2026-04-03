@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_DIR="${ROADMAP_AI_DIR:-$HOME/roadmap-ai}"
+TEST_SCRIPT="$PROJECT_DIR/scripts/test_exports.sh"
+PYTEST_CMD=(pytest -k export --maxfail=1 --disable-warnings)
+
+if [ ! -d "$PROJECT_DIR" ]; then
+  echo "[pre-commit] roadmap-ai repo not found at $PROJECT_DIR" >&2
+  exit 1
+fi
+
+run_step() {
+  local label="$1"
+  shift
+  echo "[pre-commit] Running $label..."
+  if "$@"; then
+    echo "[pre-commit] $label passed"
+  else
+    echo "[pre-commit] $label failed" >&2
+    exit 1
+  fi
+}
+
+if [ -x "$TEST_SCRIPT" ]; then
+  run_step "scripts/test_exports.sh" bash -c "cd \"$PROJECT_DIR\" && \"$TEST_SCRIPT\""
+else
+  echo "[pre-commit] $TEST_SCRIPT missing or not executable" >&2
+  exit 1
+fi
+
+if command -v pytest >/dev/null 2>&1; then
+  run_step "pytest -k export" bash -c "cd \"$PROJECT_DIR\" && ${PYTEST_CMD[*]}"
+else
+  echo "[pre-commit] pytest not found — skipping optional step" >&2
+fi

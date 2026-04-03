@@ -1,0 +1,32 @@
+{
+  "version": "0.1",
+  "timestamp_utc": "{{CURRENT_DATE}}",
+  "control_plane": {
+    "system_prompt_active": true,
+    "workflow_version": "v2.0",
+    "clipboard_tool": "pbcopy"
+  },
+  "engines": {
+    "claudobot": {
+      "role": "Spec, Review, Test",
+      "active_session": null,
+      "last_run_utc": null
+    },
+    "codex": {
+      "role": "Impl, Test, Commit",
+      "repo_status": "clean",
+      "last_commit_sha": null
+    },
+    "ginie": {
+      "role": "Orkestrering, Gatekeeper",
+      "current_task": "None"
+    }
+  },
+  "missions": [],
+  "checklist": [
+    "Mission-Control docs exists",
+    "System Prompt loaded",
+    "Virtual Env active",
+    "Git initialized"
+  ]
+}
