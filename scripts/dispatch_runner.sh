@@ -38,17 +38,50 @@ log_warn() { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 log_info() { echo -e "${BLUE}[INFO]${NC}  $1"; }
 
 write_error_json() {
-    local op="$1" step="$2" error_msg="$3" exit_code="${4:-1}"
-    mkdir -p "$OUTPUT_DIR"
-    cat > "${OUTPUT_DIR}/error.json" <<EOF_JSON
-{
-  "timestamp": "${TIMESTAMP}",
-  "op": "${op}",
-  "step": "${step}",
-  "error": "${error_msg}",
-  "exit_code": ${exit_code}
+    local op="${1:-unknown}"
+    local step="${2:-unknown}"
+    local error_msg="${3:-unknown error}"
+    local exit_code="${4:-1}"
+    local ts
+    ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    local idem_key="none"
+    if declare -f idem_generate_key >/dev/null; then
+        idem_key=$(idem_generate_key "$op" "$step" 2>/dev/null || echo "none")
+    fi
+
+    local payload
+    payload=$(
+        ROADMAP_ERROR_TS="$ts" \
+        ROADMAP_ERROR_OP="$op" \
+        ROADMAP_ERROR_STEP="$step" \
+        ROADMAP_ERROR_MSG="$error_msg" \
+        ROADMAP_ERROR_CODE="$exit_code" \
+        ROADMAP_ERROR_KEY="$idem_key" \
+        python3 - <<'PY'
+import json, os
+payload = {
+    "roadmap_version": "0.3.0",
+    "timestamp": os.environ["ROADMAP_ERROR_TS"],
+    "command": os.environ["ROADMAP_ERROR_OP"],
+    "status": "error",
+    "data": {
+        "step": os.environ["ROADMAP_ERROR_STEP"],
+        "message": os.environ["ROADMAP_ERROR_MSG"],
+        "exit_code": int(os.environ["ROADMAP_ERROR_CODE"]),
+    },
+    "metadata": {
+        "idempotency_key": os.environ["ROADMAP_ERROR_KEY"],
+        "verb": os.environ["ROADMAP_ERROR_OP"],
+    },
 }
-EOF_JSON
+print(json.dumps(payload, indent=2))
+PY
+    )
+
+    mkdir -p "$OUTPUT_DIR"
+    echo "$payload" > "${OUTPUT_DIR}/error.json"
+    echo "$payload" > "${OUTPUT_DIR}/error_${op}.json"
+    echo "$payload" >> "${OUTPUT_DIR}/error_history.jsonl"
     log_fail "Error written to ${OUTPUT_DIR}/error.json"
 }
 
