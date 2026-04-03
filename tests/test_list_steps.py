@@ -37,10 +37,10 @@ def test_list_steps_json_output(runner):
     result = runner.invoke(cli, ["list-steps", "--json"])
     assert result.exit_code == 0
     payload = json.loads(result.output)
-    assert payload["count"] == 2
-    titles = {s["title"] for s in payload["steps"]}
+    assert payload["data"]["count"] == 2
+    titles = {s["title"] for s in payload["data"]["steps"]}
     assert {"Step A", "Step B"} == titles
-    due_entry = next(s for s in payload["steps"] if s["title"] == "Step B")
+    due_entry = next(s for s in payload["data"]["steps"] if s["title"] == "Step B")
     assert due_entry["due_date"].startswith(due_date)
 
 
@@ -51,6 +51,6 @@ def test_list_steps_filters_by_short_mission_id(runner):
     result = runner.invoke(cli, ["list-steps", "--mission", mission_id[:4], "--json"])
     assert result.exit_code == 0
     payload = json.loads(result.output)
-    assert payload["count"] == 1
-    assert payload["steps"][0]["title"] == "Only Step"
-    assert payload["filter_mission"] == mission_id
+    assert payload["data"]["count"] == 1
+    assert payload["data"]["steps"][0]["title"] == "Only Step"
+    assert payload["metadata"]["filter_mission"] == mission_id

@@ -215,9 +215,16 @@ def list_steps_command(mission: str, as_json: bool):
 
     if as_json:
         payload = {
-            "steps": steps,
-            "count": len(steps),
-            "filter_mission": resolved_mission_id,
+            "roadmap_version": "0.3.0",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "command": "list-steps",
+            "data": {
+                "steps": steps,
+                "count": len(steps),
+            },
+            "metadata": {
+                "filter_mission": resolved_mission_id,
+            },
         }
         click.echo(json.dumps(payload, indent=2))
         return
