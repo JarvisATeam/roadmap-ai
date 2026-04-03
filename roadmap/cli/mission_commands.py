@@ -6,7 +6,13 @@ import click
 import json
 
 from roadmap.storage.db import get_session
-from roadmap.storage.models import Mission, Milestone
+from roadmap.storage.models import Mission, Milestone, Step
+from roadmap.core.id_resolver import (
+    AmbiguousIDError,
+    IDNotFoundError,
+    load_state_snapshot,
+    resolve_mission_id,
+)
 
 
 @click.command("add-mission")
@@ -158,3 +164,77 @@ def add_step_command(mission_code: str, description: str, energy: int, due, mile
             click.echo(f"   Milestone: {milestone.title}")
     finally:
         session.close()
+
+
+@click.command("list-steps")
+@click.option("--mission", "-m", help="Filter by mission identifier (supports short prefix)")
+@click.option("--json", "as_json", is_flag=True, help="Output as JSON")
+def list_steps_command(mission: str, as_json: bool):
+    """List steps optionally filtered by mission."""
+    resolved_mission_id = None
+    if mission:
+        snapshot = load_state_snapshot()
+        try:
+            resolved_mission_id = resolve_mission_id(mission, snapshot)
+        except IDNotFoundError:
+            raise click.ClickException(f"Mission not found for prefix '{mission}'")
+        except AmbiguousIDError as exc:
+            sample = ", ".join(exc.matches[:3])
+            raise click.ClickException(
+                f"Prefix '{mission}' matches multiple missions: {sample}"
+            )
+
+    session = get_session()
+    try:
+        query = (
+            session.query(Step, Milestone, Mission)
+            .join(Milestone, Step.milestone_id == Milestone.id)
+            .join(Mission, Milestone.mission_id == Mission.id)
+            .order_by(Mission.title.asc(), Milestone.order.asc(), Step.created_at.asc())
+        )
+        if resolved_mission_id:
+            query = query.filter(Mission.id == resolved_mission_id)
+        rows = query.all()
+    finally:
+        session.close()
+
+    steps = [
+        {
+            "id": step.id,
+            "title": step.description,
+            "status": step.status,
+            "mission_id": mission_row.id,
+            "mission_title": mission_row.title,
+            "milestone": milestone.title,
+            "due_date": step.due_date.isoformat() if step.due_date else None,
+            "energy": step.energy or 3,
+            "created_at": step.created_at.isoformat() if step.created_at else None,
+        }
+        for step, milestone, mission_row in rows
+    ]
+
+    if as_json:
+        payload = {
+            "steps": steps,
+            "count": len(steps),
+            "filter_mission": resolved_mission_id,
+        }
+        click.echo(json.dumps(payload, indent=2))
+        return
+
+    if not steps:
+        click.echo("No steps found.")
+        return
+
+    click.echo(f"Steps ({len(steps)}):\n")
+    for item in steps:
+        short_id = item["id"][:8]
+        click.echo(f"{short_id} | {item['title']}")
+        click.echo(f"  Mission: {item['mission_title']} ({item['mission_id'][:8]})")
+        click.echo(f"  Milestone: {item['milestone']}")
+        click.echo(f"  Status: {item['status']}")
+        if item["due_date"]:
+            click.echo(f"  Due: {item['due_date'][:10]}")
+        else:
+            click.echo("  Due: -")
+        click.echo("")

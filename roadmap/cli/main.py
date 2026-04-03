@@ -33,7 +33,8 @@ except ImportError:
 from roadmap.cli.mission_commands import (
     add_mission_command,
     list_missions_command,
-    add_step_command
+    add_step_command,
+    list_steps_command,
 )
 
 console = Console()
@@ -219,6 +220,7 @@ main.add_command(forecast_command)
 main.add_command(add_mission_command, "add-mission")
 main.add_command(list_missions_command, "list-missions")
 main.add_command(add_step_command, "add-step")
+main.add_command(list_steps_command, "list-steps")
 # Status/report commands
 main.add_command(status_command, "status")
 main.add_command(report_command, "report")
