@@ -35,28 +35,26 @@ case $choice in
     roadmap add-mission "$name"
     ;;
   8|step)
-    read -p "Mission-kode (f.eks. FEA-1): " mission
+    read -p "Mission-kode (f.eks. M-ac26eff3): " mission
     read -p "Beskrivelse: " desc
-    read -p "Deadline (YYYY-MM-DD, enter for ingen): " due
+    read -p "Deadline (YYYY-MM-DD, blank=ingen): " due
     if [ -n "$due" ]; then
-      roadmap add-step "$desc" --mission "$mission" --due "$due"
+      roadmap add-step "$mission" "$desc" --due "$due"
     else
-      roadmap add-step "$desc" --mission "$mission"
+      roadmap add-step "$mission" "$desc"
     fi
     ;;
   9|done)
-    read -p "Steg-kode (f.eks. FEA-1-S1): " step
+    read -p "Steg-kode: " step
     read -p "Grunn: " reason
     roadmap decide "$step" --approve --reason "$reason"
     ;;
   0|help)
     echo ""
     echo "ALLE KOMMANDOER:"
-    echo ""
-    echo "  roadmap --help        Roadmap CLI hjelp"
-    echo "  mc help               Mission Control hjelp"
-    echo "  cat QUICKSTART.md     Quickstart guide"
-    echo ""
+    echo "  roadmap --help"
+    echo "  mc help"
+    echo "  cat QUICKSTART.md"
     ;;
   q|quit)  exit 0 ;;
   *)       echo "Ugyldig valg" ;;
