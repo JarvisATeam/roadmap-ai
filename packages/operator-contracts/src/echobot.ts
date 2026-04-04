@@ -1,18 +1,31 @@
+export type EchobotTruthStatus = "PASSED" | "FAILED" | "PENDING";
+export type EchobotSendStatus = "QUEUE" | "APPROVED" | "REJECTED" | "SENT";
+export type EchobotReplySentiment = "positive" | "neutral" | "negative" | "unknown";
+
+export interface TruthCheckResult {
+  status: EchobotTruthStatus;
+  confidenceScore: number;
+  evidenceUrl?: string;
+  evidenceSummary?: string;
+  hypothesis?: string;
+}
+
 export interface EchobotLead {
+  id?: string;
   domain: string;
   companyName: string;
   contactEmail: string;
-  contactName: string;
+  contactName?: string;
   hypothesis: string;
-  hookType: string;
-  compressedTimeline: string;
-  draftSubject: string;
-  draftBody: string;
+  hookType?: string;
+  compressedTimeline?: string;
+  draftSubject?: string;
+  draftBody?: string;
   evidenceUrl?: string;
   confidenceScore: number;
-  truthStatus: 'PASSED' | 'FAILED' | 'PENDING';
-  sendStatus: 'QUEUE' | 'APPROVED' | 'REJECTED' | 'SENT';
-  replySentiment?: string;
+  truthStatus: EchobotTruthStatus;
+  sendStatus: EchobotSendStatus;
+  replySentiment?: EchobotReplySentiment;
   stripeInvoiceUrl?: string;
   optedOut?: boolean;
   createdAt?: string;
@@ -28,17 +41,11 @@ export interface EchobotStats {
   queueSize: number;
 }
 
-export interface EchobotReviewQueue {
-  leads: EchobotLead[];
-  generatedAt: string;
-}
-
-export interface EchobotSyncPreview {
+export interface EchobotReviewResult {
   lead: EchobotLead;
-  missionTitle: string;
-  nextActions: string[];
-  proofDefinition: string;
-  operatorNotes?: string;
+  truth: TruthCheckResult;
+  approved: boolean;
+  reviewerNotes?: string;
 }
 
 export interface EchobotPolicy {
