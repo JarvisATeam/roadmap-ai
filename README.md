@@ -1,105 +1,67 @@
-# roadmap-ai
+# ROADMAP-AI
 
-> **State-to-action engine + AI-powered roadmap builder**
-> Versjon: v0.1.0-spec | Status: building
+Dette repoet er **source of truth**.  
+Før du gjør noe som helst: verifiser faktisk repo-state.
 
----
+## Repo
+- Path: `~/roadmap-ai`
+- Remote: `git@github.com:JarvisATeam/roadmap-ai.git`
+- Branch: `main`
 
-## Hva dette er
+## Første kommando
+Kjør alltid dette først:
 
-To produkter. Én visjon. Bygget for en spesifikk profil:
-
-| App | Formål | Bruker |
-|-----|--------|--------|
-| **FlowArk Solo** | Personlig state-to-action motor | Deg selv |
-| **Roadmap Operator** | B2B kaos-til-roadmap konverter | Solo founders, kleine team |
-
----
-
-## Filtré
-
-```
-roadmap-ai/
-├── README.md                    ← denne filen
-├── ROADMAP.md                   ← 90-dagers masterplan
-├── PROFILE.md                   ← operativ personlighetsprofil
-│
-├── docs/
-│   ├── flow_formula.md          ← flow-tilstand definert
-│   ├── frustration_formula.md   ← tapspunkter kartlagt
-│   └── biometric_model.md       ← hvilke målinger som styrer handling
-│
-├── apps/
-│   ├── flowark-solo/
-│   │   ├── SPEC.md              ← produktbrief (fail-closed)
-│   │   ├── SCREENS.md           ← skjermbilder + flows
-│   │   ├── DATA_MODEL.md        ← datamodell
-│   │   ├── BUILD_PLAN.md        ← 30-dagers byggeplan
-│   │   └── NOT_IN_V1.md         ← eksplisitt eksklusjonslist
-│   │
-│   └── roadmap-operator/
-│       ├── SPEC.md              ← produktbrief + ICP
-│       ├── SCREENS.md           ← skjermbilder + flows
-│       ├── DATA_MODEL.md        ← datamodell
-│       ├── BUILD_PLAN.md        ← 30-dagers byggeplan
-│       ├── ICP.md               ← ideal customer profile
-│       └── NOT_IN_V1.md         ← eksplisitt eksklusjonslist
-│
-├── system/
-│   ├── daily_loop.md            ← morgen/midt/kveld rutine
-│   ├── work_layers.md           ← capture / active / parkering
-│   ├── decision_rules.md        ← biologisk beslutningsprotokoll
-│   └── project_template.md      ← 5-felts prosjektmal
-│
-└── tasks/
-    ├── phase1_stabilize.md      ← fase 1: stabiliser operativ state
-    ├── phase2_flowark.md        ← fase 2: bygg FlowArk Solo MVP
-    └── phase3_productize.md     ← fase 3: produktiser til Roadmap Operator
+```bash
+cd ~/roadmap-ai && {
+  echo "=== ROOT ==="
+  pwd
+  echo
+  echo "=== HEAD ==="
+  git log --oneline -1
+  echo
+  echo "=== STATUS ==="
+  git status -sb
+  echo
+  echo "=== UPSTREAM ==="
+  git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "no-upstream"
+  echo
+  echo "=== AHEAD/BEHIND ==="
+  git rev-list --left-right --count @{u}...HEAD 2>/dev/null || echo "n/a"
+  echo
+  echo "=== STASH ==="
+  git stash list | tail -n 5 || true
+  echo
+  echo "=== ROOT FILES ==="
+  ls -1
+}
 ```
 
----
+## Les dette deretter
 
-## Kjerneprinsipper
+Når repo-state er verifisert, les:
 
-### 1. Én aktiv build path per prosjekt
-Ingen prosjekter får ha 12 ideer og 7 underspor åpne samtidig.
+* `docs/AI_OPERATOR_ROOT_PROMPT.md`
 
-### 2. State bestemmer modus
-```
-søvn god + energi høy  → Deep Build
-søvn ok + energi middels → Light Ops
-søvn dårlig / irritert   → Admin / Recover
-```
+## Arbeidsregler
 
-### 3. Flow-formelen
-```
-Flow = høy mening + tydelig neste steg + biologisk stabilitet + lav friksjon
-```
+* Én blokk om gangen
+* Verifiser etter hver blokk
+* Fail-closed
+* Ingen status uten Git Proof Pack
+* Commit per logisk enhet
+* Push etter grønn gate
+* Snapshot ved milepæl
 
-### 4. Frustrasjon-formelen
-```
-Frustrasjon = lav mening + åpen loop + sult/ustabil energi + treghet rundt deg
-```
+## Nåværende status
 
----
+Lande og merget:
 
-## Kjappe lenker
+* Workspace foundation
+* ECHOBOT P1: Python service ingress + contracts
+* ECHOBOT P2: TypeScript adapters + internal routes
+* ECHOBOT P3: webhook routes + mission sync
 
-- [90-dagers plan](./ROADMAP.md)
-- [Din operative profil](./PROFILE.md)
-- [FlowArk Solo — produktspec](./apps/flowark-solo/SPEC.md)
-- [Roadmap Operator — produktspec](./apps/roadmap-operator/SPEC.md)
-- [Daglig loop](./system/daily_loop.md)
-- [Fase 1 tasks](./tasks/phase1_stabilize.md)
+## Prinsipp
 
----
-
-## Hard beslutning
-
-| Valg | Beslutning |
-|------|------------|
-| Biometrikk | Oura / enkel wearable, IKKE full stack |
-| Personlig app | FlowArk Solo |
-| Kommersiell app | Roadmap Operator |
-| Primærfokus | state → next action → proof of progress |
-| Unngå | Tre parallelle appspor |
+Ikke stol på gamle handovers eller gamle prompts.
+Bruk repoet som sannhet.
