@@ -32,8 +32,7 @@ case $choice in
   6|demo)   ./scripts/demo_walkthrough.sh ;;
   7|add)
     read -p "Navn på mission: " name
-    read -p "Type (feature/bugfix/research): " type
-    roadmap add-mission "$name" --type "${type:-feature}"
+    roadmap add-mission "$name"
     ;;
   8|step)
     read -p "Mission-kode (f.eks. FEA-1): " mission
