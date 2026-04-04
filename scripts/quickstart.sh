@@ -30,7 +30,7 @@ echo "✅ All panels updated"
 echo ""
 
 echo "3. System status:"
-mc status
+~/roadmap-ai/mission-control/bin/mc.sh status
 
 echo ""
 echo "╔════════════════════════════════════════════════════════════╗"

@@ -27,8 +27,8 @@ case $choice in
   1|start)  ./scripts/quickstart.sh ;;
   2|next)   roadmap smart-next ;;
   3|dash)   ./scripts/open_dashboards.sh ;;
-  4|status) mc status ;;
-  5|watch)  mc watch ;;
+  4|status) ~/roadmap-ai/mission-control/bin/mc.sh status ;;
+  5|watch)  ~/roadmap-ai/mission-control/bin/mc.sh watch ;;
   6|demo)   ./scripts/demo_walkthrough.sh ;;
   7|add)
     read -p "Navn på mission: " name
