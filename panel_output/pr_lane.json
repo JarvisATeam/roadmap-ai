@@ -1,0 +1,11 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-04T06:55:02.934821+00:00",
+  "command": "github-pr-sync",
+  "data": {
+    "error": "401 {\"message\": \"Bad credentials\", \"documentation_url\": \"https://docs.github.com/rest\", \"status\": \"401\"}"
+  },
+  "metadata": {
+    "status": "failed"
+  }
+}
