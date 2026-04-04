@@ -1,11 +1,15 @@
 {
   "roadmap_version": "0.3.0",
-  "timestamp": "2026-04-04T06:55:02.934821+00:00",
+  "timestamp": "2026-04-04T07:08:36.528789+00:00",
   "command": "github-pr-sync",
   "data": {
-    "error": "401 {\"message\": \"Bad credentials\", \"documentation_url\": \"https://docs.github.com/rest\", \"status\": \"401\"}"
+    "repository": "JarvisATeam/roadmap-ai",
+    "open_prs": 0,
+    "pull_requests": []
   },
   "metadata": {
-    "status": "failed"
+    "status": "success",
+    "pr_count": 0,
+    "rate_limit_remaining": 4996
   }
 }
