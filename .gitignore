@@ -81,3 +81,8 @@ panel_output/error.json
 panel_output/error_*.json
 panel_output/error_history.jsonl
 panel_output/phone_summary.txt
+
+# Credentials (NEVER commit these)
+.credentials/
+*.env
+.env.*
