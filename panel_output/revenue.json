@@ -1,0 +1,19 @@
+{
+  "roadmap_version": "0.3.0",
+  "timestamp": "2026-04-04T07:21:17.002391+00:00",
+  "command": "stripe-revenue-sync",
+  "data": {
+    "period": "last_30_days",
+    "total_revenue": 0,
+    "currency": "usd",
+    "successful_charges": 0,
+    "failed_charges": 0,
+    "average_transaction": 0,
+    "recent_charges": []
+  },
+  "metadata": {
+    "status": "success",
+    "charges_analyzed": 0,
+    "stripe_mode": "live"
+  }
+}
