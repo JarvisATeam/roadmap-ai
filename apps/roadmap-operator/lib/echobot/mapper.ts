@@ -1,5 +1,14 @@
-import type { EchobotLead, EchobotStats, EchobotReviewResult, TruthCheckResult } from '../../../../packages/operator-contracts/src/echobot';
-import type { RoadmapMissionPayload, RoadmapSyncPreview } from '../../../../packages/operator-contracts/src/roadmap-sync';
+import type {
+  EchobotLead,
+  EchobotStats,
+  EchobotReviewResult,
+  TruthCheckResult,
+} from '../../../../packages/operator-contracts/src/echobot';
+import type {
+  RoadmapMissionPayload,
+  RoadmapSyncPreview,
+  RoadmapSyncResult,
+} from '../../../../packages/operator-contracts/src/roadmap-sync';
 
 export function mapStats(raw: any): EchobotStats {
   return {
@@ -30,7 +39,7 @@ export function mapLead(raw: any): EchobotLead {
     sendStatus: raw.sendStatus ?? raw.send_status ?? 'QUEUE',
     replySentiment: raw.replySentiment ?? raw.reply_sentiment ?? 'unknown',
     stripeInvoiceUrl: raw.stripeInvoiceUrl ?? raw.stripe_invoice_url,
-    optedOut: !!(raw.optedOut ?? raw.opted_out),
+    optedOut: Boolean(raw.optedOut ?? raw.opted_out),
     createdAt: raw.createdAt ?? raw.created_at,
   };
 }
@@ -69,5 +78,30 @@ export function mapSyncPreview(raw: any): RoadmapSyncPreview {
   return {
     lead: mapLead(raw.lead ?? raw.payload?.lead ?? raw),
     payload: mapMissionPayload(raw.payload ?? raw),
+  };
+}
+
+export function mapReplyWebhook(raw: any): EchobotLead {
+  const lead = raw.lead ?? raw;
+  return mapLead({
+    ...lead,
+    replySentiment: lead.replySentiment ?? lead.sentiment ?? 'unknown',
+  });
+}
+
+export function mapStripeWebhook(raw: any): EchobotLead {
+  const lead = raw.lead ?? raw;
+  return mapLead({
+    ...lead,
+    stripeInvoiceUrl: lead.stripeInvoiceUrl ?? lead.invoiceUrl ?? lead.invoice_url ?? '',
+    replySentiment: lead.replySentiment ?? 'positive',
+  });
+}
+
+export function mapMissionResult(raw: any): RoadmapSyncResult {
+  return {
+    missionId: raw.missionId ?? raw.mission_id ?? 'pending',
+    createdAt: raw.createdAt ?? raw.created_at ?? new Date().toISOString(),
+    status: raw.status ?? 'queued',
   };
 }

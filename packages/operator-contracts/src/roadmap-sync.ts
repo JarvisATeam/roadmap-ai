@@ -19,8 +19,11 @@ export interface RoadmapSyncPreview {
   payload: RoadmapMissionPayload;
 }
 
+export type RoadmapSyncStatus = "created" | "queued" | "skipped" | "blocked" | "already_processed";
+
 export interface RoadmapSyncResult {
   missionId: string;
   createdAt: string;
-  status: "created" | "queued" | "skipped";
+  status: RoadmapSyncStatus;
+  metadata?: Record<string, unknown>;
 }
