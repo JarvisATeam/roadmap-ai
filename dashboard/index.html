@@ -2,34 +2,69 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Roadmap-AI</title>
+<title>Roadmap-AI Control Center</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#e2e8f0;font-family:system-ui}
-.header{background:#1e293b;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center}
-.btn{background:#334155;color:#e2e8f0;border:none;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;font-size:0.85rem}
-.btn:hover{background:#475569}
-.btn.active{background:#38bdf8;color:#0f172a}
-.main{padding:1rem}
-.panel{display:none;height:calc(100vh - 80px)}
+body{background:#0f172a;color:#e2e8f0;font-family:system-ui;overflow:hidden}
+.top-bar{background:#1e293b;padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #334155}
+.logo{font-size:1.2rem;font-weight:700;color:#38bdf8}
+.status{display:flex;gap:1rem;font-size:0.8rem}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot-green{background:#22c55e}
+.dot-red{background:#ef4444}
+.nav{background:#1e293b;padding:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;border-bottom:1px solid #334155}
+.btn{background:#334155;color:#e2e8f0;border:none;padding:0.6rem 1rem;border-radius:6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s}
+.btn:hover{background:#475569;transform:translateY(-1px)}
+.btn.active{background:#38bdf8;color:#0f172a;font-weight:600}
+.layout{display:flex;height:calc(100vh - 120px)}
+.sidebar{width:300px;background:#1e293b;border-right:1px solid #334155;padding:1rem;overflow-y:auto}
+.sidebar h3{font-size:0.9rem;color:#94a3b8;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.05em}
+.task-card{background:#334155;padding:0.75rem;border-radius:6px;margin-bottom:0.5rem;cursor:pointer;transition:all 0.2s}
+.task-card:hover{background:#475569;transform:translateX(4px)}
+.task-title{font-size:0.9rem;font-weight:600;margin-bottom:0.25rem}
+.task-meta{font-size:0.75rem;color:#94a3b8}
+.task-score{float:right;background:#22c55e;color:#0f172a;padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:700}
+.main{flex:1;padding:1rem;overflow-y:auto}
+.panel{display:none}
 .panel.active{display:block}
-.panel iframe{width:100%;height:100%;border:none;border-radius:8px}
-.grid-view{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1rem;height:calc(100vh - 80px);overflow:auto}
-.grid-view iframe{height:350px;border-radius:8px;border:none}
+.panel iframe{width:100%;height:calc(100vh - 140px);border:none;border-radius:8px;background:#1e293b}
+.grid-view{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:1rem;height:calc(100vh - 140px);overflow:auto}
+.grid-view iframe{height:320px}
+.action-bar{background:#1e293b;padding:0.75rem;border-top:1px solid #334155;display:flex;gap:0.5rem}
+.action-btn{background:#22c55e;color:#0f172a;border:none;padding:0.5rem 1.5rem;border-radius:6px;cursor:pointer;font-weight:600}
+.action-btn:hover{opacity:0.9}
+.action-btn.secondary{background:#334155;color:#e2e8f0}
+.refresh-indicator{color:#94a3b8;font-size:0.7rem;margin-left:auto;align-self:center}
 </style>
 </head>
 <body>
-<div class="header">
-<button class="btn active" onclick="show('all')">📊 Alle</button>
+<div class="top-bar">
+<div class="logo">🎯 Roadmap-AI</div>
+<div class="status">
+<span><span class="status-dot dot-green"></span> System OK</span>
+<span id="last-update">Last: -</span>
+</div>
+</div>
+<div class="nav">
+<button class="btn active" onclick="show('all')">📊 Oversikt</button>
 <button class="btn" onclick="show('next')">🎯 Neste</button>
 <button class="btn" onclick="show('risk')">⚠️ Risiko</button>
 <button class="btn" onclick="show('progress')">📈 Fremgang</button>
-<button class="btn" onclick="show('decisions')">✅ Beslutninger</button>
+<button class="btn" onclick="show('decisions')">✅ Logg</button>
 <button class="btn" onclick="show('forecast')">🔮 Prognose</button>
 <button class="btn" onclick="show('orchestration')">🤖 Agenter</button>
 <button class="btn" onclick="show('pr')">🔀 GitHub</button>
 <button class="btn" onclick="show('health')">🌐 Noder</button>
 <button class="btn" onclick="show('revenue')">💰 Revenue</button>
+</div>
+<div class="layout">
+<div class="sidebar" id="sidebar">
+<h3>🎯 Neste Oppgaver</h3>
+<div id="task-list">Laster...</div>
+<div style="margin-top:1.5rem">
+<h3>⚡ Hurtighandlinger</h3>
+<button class="task-card" onclick="refreshAll()" style="text-align:center;width:100%">🔄 Refresh Alt</button>
+</div>
 </div>
 <div class="main">
 <div id="all" class="panel active grid-view">
@@ -53,6 +88,7 @@ body{background:#0f172a;color:#e2e8f0;font-family:system-ui}
 <div id="health" class="panel"><iframe src="remote_health.html"></iframe></div>
 <div id="revenue" class="panel"><iframe src="revenue.html"></iframe></div>
 </div>
+</div>
 <script>
 function show(id){
 document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -60,6 +96,39 @@ document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 event.target.classList.add('active');
 }
+async function loadTasks(){
+try{
+const r=await fetch('../panel_output/smart_next.json');
+const j=await r.json();
+const rec=j.data?.recommendation;
+if(rec){
+document.getElementById('task-list').innerHTML=`
+<div class="task-card" onclick="openTask('${rec.task_id}')">
+<span class="task-score">${(rec.score*100).toFixed(0)}</span>
+<div class="task-title">${rec.task_name}</div>
+<div class="task-meta">Urgency ${rec.factors.urgency}x | Rank #${rec.rank}</div>
+</div>`;
+}
+}catch(e){
+document.getElementById('task-list').innerHTML='<div style="color:#ef4444;font-size:0.8rem">Feil ved lasting</div>';
+}
+}
+function openTask(id){
+const short=id.substring(0,8);
+if(confirm('Åpne oppgave '+short+' i terminal?')){
+window.location.href='roadmap://decide/'+short;
+}
+}
+function refreshAll(){
+document.querySelectorAll('iframe').forEach(f=>f.contentWindow.location.reload());
+loadTasks();
+document.getElementById('last-update').textContent='Last: '+new Date().toLocaleTimeString();
+}
+setInterval(refreshAll,30000);
+loadTasks();
+setInterval(()=>{
+document.getElementById('last-update').textContent='Last: '+new Date().toLocaleTimeString();
+},1000);
 </script>
 </body>
 </html>
