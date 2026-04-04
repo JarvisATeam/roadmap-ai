@@ -1,6 +1,6 @@
 {
   "roadmap_version": "0.3.0",
-  "timestamp": "2026-04-04T07:21:17.002391+00:00",
+  "timestamp": "2026-04-04T07:22:38.872452+00:00",
   "command": "stripe-revenue-sync",
   "data": {
     "period": "last_30_days",
