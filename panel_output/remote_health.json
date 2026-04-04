@@ -1,6 +1,6 @@
 {
   "roadmap_version": "0.3.0",
-  "timestamp": "2026-04-04T07:17:28.970293+00:00",
+  "timestamp": "2026-04-04T07:18:42.102513+00:00",
   "command": "remote-health-monitor",
   "data": {
     "nodes": [
@@ -10,9 +10,9 @@
         "description": "Jetson - AImigo",
         "status": "online",
         "reachable": true,
-        "latency_ms": 362.94,
+        "latency_ms": 5.845,
         "ssh_available": true,
-        "last_check": "2026-04-04T07:17:28.963781+00:00"
+        "last_check": "2026-04-04T07:18:42.095703+00:00"
       },
       {
         "name": "macbook-pro-3",
@@ -20,9 +20,9 @@
         "description": "MacBook Pro 3",
         "status": "online",
         "reachable": true,
-        "latency_ms": 0.46,
+        "latency_ms": 1.149,
         "ssh_available": true,
-        "last_check": "2026-04-04T07:17:28.970080+00:00"
+        "last_check": "2026-04-04T07:18:42.102476+00:00"
       }
     ],
     "summary": {
