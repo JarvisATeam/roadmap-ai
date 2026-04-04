@@ -35,7 +35,7 @@ case $choice in
     roadmap add-mission "$name"
     ;;
   8|step)
-    read -p "Mission-kode (f.eks. M-ac26eff3): " mission
+    read -p "Mission-kode: " mission
     read -p "Beskrivelse: " desc
     read -p "Deadline (YYYY-MM-DD, blank=ingen): " due
     if [ -n "$due" ]; then
@@ -46,8 +46,8 @@ case $choice in
     ;;
   9|done)
     read -p "Steg-kode: " step
-    read -p "Grunn: " reason
-    roadmap decide "$step" --approve --reason "$reason"
+    read -p "Beslutning (f.eks. 'Godkjent og testet'): " decision
+    roadmap decide "$step" "$decision"
     ;;
   0|help)
     echo ""
