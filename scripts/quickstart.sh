@@ -25,7 +25,7 @@ echo "2. Generating fresh panel data..."
 python scripts/github_pr_sync.py >/dev/null 2>&1 || true
 python scripts/remote_health_monitor.py >/dev/null 2>&1 || true
 python scripts/stripe_revenue_sync.py >/dev/null 2>&1 || true
-python scripts/orchestration_status.sh >/dev/null 2>&1 || true
+./scripts/orchestration_status.sh >/dev/null 2>&1 || true
 echo "✅ All panels updated"
 echo ""
 
