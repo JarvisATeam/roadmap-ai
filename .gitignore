@@ -1,0 +1,7 @@
+node_modules/
+.turbo/
+dist/
+apps/*/dist/
+apps/*/.turbo/
+packages/*/dist/
+.DS_Store
