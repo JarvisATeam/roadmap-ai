@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Roadmap-AI</title>
 <style>
-body{background:#0f172a;color:#e2e8f0;font-family:system-ui;padding:1rem;margin:0}
-h1{text-align:center;color:#38bdf8}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1rem}
-iframe{width:100%;height:400px;border:none;border-radius:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#e2e8f0;font-family:system-ui}
+.header{background:#1e293b;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center}
+.btn{background:#334155;color:#e2e8f0;border:none;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;font-size:0.85rem}
+.btn:hover{background:#475569}
+.btn.active{background:#38bdf8;color:#0f172a}
+.main{padding:1rem}
+.panel{display:none;height:calc(100vh - 80px)}
+.panel.active{display:block}
+.panel iframe{width:100%;height:100%;border:none;border-radius:8px}
+.grid-view{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1rem;height:calc(100vh - 80px);overflow:auto}
+.grid-view iframe{height:350px;border-radius:8px;border:none}
 </style>
 </head>
 <body>
-<h1>Roadmap-AI Dashboard</h1>
-<div class="grid">
+<div class="header">
+<button class="btn active" onclick="show('all')">📊 Alle</button>
+<button class="btn" onclick="show('next')">🎯 Neste</button>
+<button class="btn" onclick="show('risk')">⚠️ Risiko</button>
+<button class="btn" onclick="show('progress')">📈 Fremgang</button>
+<button class="btn" onclick="show('decisions')">✅ Beslutninger</button>
+<button class="btn" onclick="show('forecast')">🔮 Prognose</button>
+<button class="btn" onclick="show('orchestration')">🤖 Agenter</button>
+<button class="btn" onclick="show('pr')">🔀 GitHub</button>
+<button class="btn" onclick="show('health')">🌐 Noder</button>
+<button class="btn" onclick="show('revenue')">💰 Revenue</button>
+</div>
+<div class="main">
+<div id="all" class="panel active grid-view">
 <iframe src="smart_next.html"></iframe>
 <iframe src="risk_summary.html"></iframe>
 <iframe src="progress.html"></iframe>
@@ -22,5 +43,23 @@ iframe{width:100%;height:400px;border:none;border-radius:8px}
 <iframe src="remote_health.html"></iframe>
 <iframe src="revenue.html"></iframe>
 </div>
+<div id="next" class="panel"><iframe src="smart_next.html"></iframe></div>
+<div id="risk" class="panel"><iframe src="risk_summary.html"></iframe></div>
+<div id="progress" class="panel"><iframe src="progress.html"></iframe></div>
+<div id="decisions" class="panel"><iframe src="decisions.html"></iframe></div>
+<div id="forecast" class="panel"><iframe src="forecast.html"></iframe></div>
+<div id="orchestration" class="panel"><iframe src="orchestration.html"></iframe></div>
+<div id="pr" class="panel"><iframe src="pr_lane.html"></iframe></div>
+<div id="health" class="panel"><iframe src="remote_health.html"></iframe></div>
+<div id="revenue" class="panel"><iframe src="revenue.html"></iframe></div>
+</div>
+<script>
+function show(id){
+document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+event.target.classList.add('active');
+}
+</script>
 </body>
 </html>
