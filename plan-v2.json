@@ -1,0 +1,39 @@
+{
+  "plan_id": "53140c5c-6594-4103-933c-6316beedc18c",
+  "project": "Build roadmap.ai MVP",
+  "generated": "2026-03-30",
+  "milestones": [
+    {
+      "id": "ce5e2ce4-3efd-4be7-bbef-2eaf54c1c26c",
+      "title": "Core continuity engine",
+      "target_date": null,
+      "status": "planned",
+      "tasks": [
+        {
+          "id": "46382d33-15d5-486b-ad39-410e4fcd60f6",
+          "title": "Build plan-diff engine",
+          "owner": "unknown",
+          "status": "done"
+        },
+        {
+          "id": "9072cb52-7c98-46c4-86fb-bc9ff8d50898",
+          "title": "Build thread recovery engine",
+          "owner": "unknown",
+          "status": "done"
+        },
+        {
+          "id": "82ef682c-45f2-411f-abfd-4768dfcbdcdb",
+          "title": "Integrate with CLI",
+          "owner": "unknown",
+          "status": "todo"
+        },
+        {
+          "id": "bb11b363-7c9c-496c-95b4-e2da16a330b9",
+          "title": "Add LLM summarization",
+          "owner": "unknown",
+          "status": "todo"
+        }
+      ]
+    }
+  ]
+}
