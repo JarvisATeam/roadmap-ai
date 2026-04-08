@@ -1,0 +1,275 @@
+# SECRETS_INDEX
+
+Sist oppdatert: 2026-04-08T19:44:06.520847
+
+## Regel
+- Kun metadata: filbaner og variabelnavn.
+- Ingen hemmelige verdier.
+
+## Auth/API-relevante variabler
+- [MAC] `/Users/christerolsen/roadmap-ai/.env.example`
+  - auth_keys: GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL, RAILWAY_API_TOKEN, RESEND_API_KEY, STRIPE_PUBLISHABLE_KEY, STRIPE_PUBLISHABLE_KEY_TEST, STRIPE_SECRET_KEY, STRIPE_SECRET_KEY_TEST, STRIPE_WEBHOOK_SECRET, STRIPE_WEBHOOK_SECRET_TEST
+- [MAC] `/Users/christerolsen/roadmap-ai/services/echobot-py/.env.example`
+  - auth_keys: APOLLO_API_KEY, FIRECRAWL_API_KEY, GRAYHAT_API_KEY, N8N_WEBHOOK_URL, OPENAI_API_KEY, SENDGRID_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_userid_zshsafe_20260126_200109/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env.local`
+  - auth_keys: NEXTAUTH_SECRET, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/.env`
+  - auth_keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/openwebui-stack/stack/.env.hftoken`
+  - auth_keys: HF_TOKEN
+- [MAC] `/Users/christerolsen/GinieSystem/openwebui-stack/stack/.env`
+  - auth_keys: ROADMAP_HOOK_KEY, SYMBIOSIS_REMOTE_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/openwebui-stack/vendor/open-webui/.env.example`
+  - auth_keys: OPENAI_API_BASE_URL, OPENAI_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/web/.env.local`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/web/.env.example`
+  - auth_keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/IfTTT-Webhook-Bridge/.env`
+  - auth_keys: GINIE_IFTTT_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/IfTTT-Webhook-Bridge/.env.example`
+  - auth_keys: GINIE_IFTTT_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/NotionToolkit/.env`
+  - auth_keys: NOTION_TOKEN
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/.env`
+  - auth_keys: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/.env.example`
+  - auth_keys: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/04_Frontend/ask-control-panel/.env.local`
+  - auth_keys: NEXT_PUBLIC_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/04_Frontend/ask-control-panel/.env.example`
+  - auth_keys: NEXT_PUBLIC_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/modules/symbiotic/.env.template`
+  - auth_keys: CONVERTKIT_API_KEY, DASHBOARD_PASSWORD, DASHBOARD_SECRET_KEY, GUMROAD_API_KEY, OPENAI_API_KEY, STRIPE_API_KEY, STRIPE_WEBHOOK_SECRET, TELEGRAM_BOT_TOKEN
+- [MAC] `/Users/christerolsen/GinieSystem/LEVIATHAN_V3_REAL/.env`
+  - auth_keys: GEMINI_API_KEY, SERPAPI_KEY, TELEGRAM_TOKEN, YOUTUBE_API_KEY
+- [JETSON] `/home/aimigo/AImigoBot/.env.bak.20260407_235412`
+  - auth_keys: AIMIGO_API_KEY, LEVIATHAN_API_KEY, LEVIATHAN_IP_WHITELIST, LEVIATHAN_RATE_LIMIT, OPENAI_API_KEY, OPENAI_PROJECT_ID, TELEGRAM_BOT_TOKEN
+- [JETSON] `/home/aimigo/AImigoBot/.env`
+  - auth_keys: AIMIGO_API_KEY, LEVIATHAN_API_KEY, LEVIATHAN_IP_WHITELIST, LEVIATHAN_RATE_LIMIT, OPENAI_API_KEY, OPENAI_PROJECT_ID, TELEGRAM_BOT_TOKEN
+- [JETSON] `/home/aimigo/AImigoBot/.env.backup.20260407-231330`
+  - auth_keys: AIMIGO_API_KEY, LEVIATHAN_API_KEY, LEVIATHAN_IP_WHITELIST, LEVIATHAN_RATE_LIMIT, OPENAI_API_KEY, OPENAI_PROJECT_ID, TELEGRAM_BOT_TOKEN
+- [JETSON] `/home/aimigo/AImigoBot/backups/20260327_150210/.env.bak`
+  - auth_keys: OPENAI_API_KEY, OPENAI_PROJECT_ID
+
+## Full env-indeks
+- [MAC] `/Users/christerolsen/roadmap-ai/.env.example`
+  - key_count: 17
+  - keys: DATABASE_URL, EMAIL_FROM, FLOWARK_SOLO_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL, RAILWAY_API_TOKEN, RAILWAY_PROJECT_ID, RESEND_API_KEY, REVENUE_OS_URL, STRIPE_PUBLISHABLE_KEY, STRIPE_PUBLISHABLE_KEY_TEST, STRIPE_SECRET_KEY, STRIPE_SECRET_KEY_TEST, STRIPE_WEBHOOK_SECRET, STRIPE_WEBHOOK_SECRET_TEST
+- [MAC] `/Users/christerolsen/roadmap-ai/services/echobot-py/.env.example`
+  - key_count: 8
+  - keys: APOLLO_API_KEY, FIRECRAWL_API_KEY, GRAYHAT_API_KEY, N8N_WEBHOOK_URL, OPENAI_API_KEY, SENDGRID_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/.env`
+  - key_count: 6
+  - keys: ALL_PROXY, GEMINI_API_KEY, HTTPS_PROXY, HTTP_PROXY, NO_PROXY, OPENAI_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_userid_zshsafe_20260126_200109/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_userid_zshsafe_20260126_200109/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env.local`
+  - key_count: 4
+  - keys: NEXTAUTH_SECRET, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/.env`
+  - key_count: 3
+  - keys: GEMINI_API_KEY, OPENAI_API_KEY, PERPLEXITY_API_KEY
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/.env.example`
+  - key_count: 2
+  - keys: ANVIL_TIER, DEFAULT_CUSTOMER_ID
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/openwebui-stack/stack/.env.hftoken`
+  - key_count: 6
+  - keys: HF_TOKEN, JETSON_SSH, MODEL, OLLAMA_BASE_URL, PULL_TARGET, WEBUI_PORT
+- [MAC] `/Users/christerolsen/GinieSystem/openwebui-stack/stack/.env`
+  - key_count: 11
+  - keys: JETSON_SSH, MODEL, OLLAMA_BASE_URL, PULL_TARGET, ROADMAP_HOOK_KEY, ROADMAP_HOOK_TIMEOUT_MS, ROADMAP_HOOK_URL, SYMBIOSIS_REMOTE_KEY, SYMBIOSIS_REMOTE_TIMEOUT_MS, SYMBIOSIS_REMOTE_URL, WEBUI_PORT
+- [MAC] `/Users/christerolsen/GinieSystem/openwebui-stack/vendor/open-webui/.env.example`
+  - key_count: 8
+  - keys: ANONYMIZED_TELEMETRY, CORS_ALLOW_ORIGIN, DO_NOT_TRACK, FORWARDED_ALLOW_IPS, OLLAMA_BASE_URL, OPENAI_API_BASE_URL, OPENAI_API_KEY, SCARF_NO_ANALYTICS
+- [MAC] `/Users/christerolsen/GinieSystem/web/.env.local`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/web/.env.example`
+  - key_count: 1
+  - keys: VITE_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/triage/.env`
+  - key_count: 13
+  - keys: AUDITCHAIN_HEALTH_URL, BACKEND_MODE, BIOCORE_HEALTH_URL, DOCKER_COMPOSE_FILE, DOCKER_COMPOSE_PROJECT, K8S_DEPLOYMENTS, K8S_HEALTH_URL, K8S_NAMESPACE, LOG_DIR, NF47_DRAIN_TIMEOUT, NF47_MODE, NF47_NODE, SYSTEMD_SERVICES
+- [MAC] `/Users/christerolsen/GinieSystem/IfTTT-Webhook-Bridge/.env`
+  - key_count: 3
+  - keys: GINIE_ENV, GINIE_IFTTT_WEBHOOK_SECRET, GINIE_PUBLIC_BASE_URL
+- [MAC] `/Users/christerolsen/GinieSystem/IfTTT-Webhook-Bridge/.env.example`
+  - key_count: 3
+  - keys: GINIE_ENV, GINIE_IFTTT_WEBHOOK_SECRET, GINIE_PUBLIC_BASE_URL
+- [MAC] `/Users/christerolsen/GinieSystem/NotionToolkit/.env`
+  - key_count: 2
+  - keys: NOTION_TASK_DB_ID, NOTION_TOKEN
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/.env`
+  - key_count: 4
+  - keys: DATABASE_URL, PORT, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/.env.example`
+  - key_count: 6
+  - keys: CORS_ORIGIN, DATABASE_URL, NODE_ENV, PORT, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/04_Frontend/ask-control-panel/.env.local`
+  - key_count: 1
+  - keys: NEXT_PUBLIC_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/04_Frontend/ask-control-panel/.env.example`
+  - key_count: 1
+  - keys: NEXT_PUBLIC_API_BASE
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/02_Backend/ask-control-api/.env.local`
+  - key_count: 4
+  - keys: ALLOWED_ORIGINS, AUDIT_LOG_PATH, PORT, RAG_ANSWER_SCRIPT
+- [MAC] `/Users/christerolsen/GinieSystem/revenue_os/02_Backend/ask-control-api/.env.example`
+  - key_count: 4
+  - keys: ALLOWED_ORIGINS, AUDIT_LOG_PATH, PORT, RAG_ANSWER_SCRIPT
+- [MAC] `/Users/christerolsen/GinieSystem/modules/symbiotic/.env.template`
+  - key_count: 9
+  - keys: CONVERTKIT_API_KEY, DASHBOARD_PASSWORD, DASHBOARD_SECRET_KEY, GUMROAD_API_KEY, OPENAI_API_KEY, STRIPE_API_KEY, STRIPE_WEBHOOK_SECRET, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+- [MAC] `/Users/christerolsen/GinieSystem/LEVIATHAN_V3_REAL/.env`
+  - key_count: 9
+  - keys: GEMINI_API_KEY, LEV_LOG_PATH, LEV_RUN_EVERY_HOURS, LEV_STATE_PATH, SERPAPI_KEY, TELEGRAM_CHAT_ID, TELEGRAM_TOKEN, TZ, YOUTUBE_API_KEY
+- [JETSON] `/home/aimigo/AImigoBot/.env.bak.20260407_235412`
+  - key_count: 10
+  - keys: AIMIGO_API_KEY, AIMIGO_BASE_URL, AIMIGO_BOT_PORT, BASE_URL, LEVIATHAN_API_KEY, LEVIATHAN_IP_WHITELIST, LEVIATHAN_RATE_LIMIT, OPENAI_API_KEY, OPENAI_PROJECT_ID, TELEGRAM_BOT_TOKEN
+- [JETSON] `/home/aimigo/AImigoBot/.env`
+  - key_count: 10
+  - keys: AIMIGO_API_KEY, AIMIGO_BASE_URL, AIMIGO_BOT_PORT, BASE_URL, LEVIATHAN_API_KEY, LEVIATHAN_IP_WHITELIST, LEVIATHAN_RATE_LIMIT, OPENAI_API_KEY, OPENAI_PROJECT_ID, TELEGRAM_BOT_TOKEN
+- [JETSON] `/home/aimigo/AImigoBot/.env.backup.20260407-231330`
+  - key_count: 10
+  - keys: AIMIGO_API_KEY, AIMIGO_BASE_URL, AIMIGO_BOT_PORT, BASE_URL, LEVIATHAN_API_KEY, LEVIATHAN_IP_WHITELIST, LEVIATHAN_RATE_LIMIT, OPENAI_API_KEY, OPENAI_PROJECT_ID, TELEGRAM_BOT_TOKEN
+- [JETSON] `/home/aimigo/AImigoBot/backups/20260327_150210/.env.bak`
+  - key_count: 5
+  - keys: AIMIGO_BASE_URL, AIMIGO_BOT_PORT, BASE_URL, OPENAI_API_KEY, OPENAI_PROJECT_ID
+
+## Jetson SSH-status
+- OK: 4 env-filer analysert på Jetson
+
+## Neste bruk
+- Finn auth-header/gate for 8098 basert på variabelnavnene over.
+- Verifiser kun én beskyttet route med korrekt header.
+- Ikke skriv ut eller lagre verdier i chat eller docs.

@@ -1,0 +1,558 @@
+{
+  "generated_at": "2026-04-08T16:05:02.306938",
+  "truth_root": "/Users/christerolsen/mission-control/.truth",
+  "system": {
+    "hostname": "MacBook-Pro-3.local",
+    "user": "christerolsen",
+    "platform": "macOS-15.6.1-x86_64-i386-64bit-Mach-O",
+    "machine": "x86_64",
+    "ips": "10.0.0.12"
+  },
+  "repos": [
+    {
+      "path": "/Users/christerolsen/mission-control",
+      "exists": true,
+      "git": {
+        "root": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "branch": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "head": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "status_sb": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "upstream": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "ahead_behind": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "diff_stat": "ERROR: warning: Not a git repository. Use --no-index to compare two paths outside a working tree\nusage: git diff --no-index [<options>] <path> <path>\n\nDiff output format options\n    -p, --patch           generate patch\n    -s, --no-patch        suppress diff output\n    -u                    generate patch\n    -U, --unified[=<n>]   generate diffs with <n> lines context\n    -W, --[no-]function-context\n                          generate diffs with <n> lines context\n    --raw                 generate the diff in raw format\n    --patch-with-raw      synonym for '-p --raw'\n    --patch-with-stat     synonym for '-p --stat'\n    --numstat             machine friendly --stat\n    --shortstat           output only the last line of --stat\n    -X, --dirstat[=<param1>,<param2>...]\n                          output the distribution of relative amount of changes for each sub-directory\n    --cumulative          synonym for --dirstat=cumulative\n    --dirstat-by-file[=<param1>,<param2>...]\n                          synonym for --dirstat=files,<param1>,<param2>...\n    --check               warn if changes introduce conflict markers or whitespace errors\n    --summary             condensed summary such as creations, renames and mode changes\n    --name-only           show only names of changed files\n    --name-status         show only names and status of changed files\n    --stat[=<width>[,<name-width>[,<count>]]]\n                          generate diffstat\n    --stat-width <width>  generate diffstat with a given width\n    --stat-name-width <width>\n                          generate diffstat with a given name width\n    --stat-graph-width <width>\n                          generate diffstat with a given graph width\n    --stat-count <count>  generate diffstat with limited lines\n    --[no-]compact-summary\n                          generate compact summary in diffstat\n    --binary              output a binary diff that can be applied\n    --[no-]full-index     show full pre- and post-image object names on the \"index\" lines\n    --[no-]color[=<when>] show colored diff\n    --ws-error-highlight <kind>\n                          highlight whitespace errors in the 'context', 'old' or 'new' lines in the diff\n    -z                    do not munge pathnames and use NULs as output field terminators in --raw or --numstat\n    --[no-]abbrev[=<n>]   use <n> digits to display object names\n    --src-prefix <prefix> show the given source prefix instead of \"a/\"\n    --dst-prefix <prefix> show the given destination prefix instead of \"b/\"\n    --line-prefix <prefix>\n                          prepend an additional prefix to every line of output\n    --no-prefix           do not show any source or destination prefix\n    --default-prefix      use default prefixes a/ and b/\n    --inter-hunk-context <n>\n                          show context between diff hunks up to the specified number of lines\n    --output-indicator-new <char>\n                          specify the character to indicate a new line instead of '+'\n    --output-indicator-old <char>\n                          specify the character to indicate an old line instead of '-'\n    --output-indicator-context <char>\n                          specify the character to indicate a context instead of ' '\n\nDiff rename options\n    -B, --break-rewrites[=<n>[/<m>]]\n                          break complete rewrite changes into pairs of delete and create\n    -M, --find-renames[=<n>]\n                          detect renames\n    -D, --irreversible-delete\n                          omit the preimage for deletes\n    -C, --find-copies[=<n>]\n                          detect copies\n    --[no-]find-copies-harder\n                          use unmodified files as source to find copies\n    --no-renames          disable rename detection\n    --[no-]rename-empty   use empty blobs as rename source\n    --[no-]follow         continue listing the history of a file beyond renames\n    -l <n>                prevent rename/copy detection if the number of rename/copy targets exceeds given limit\n\nDiff algorithm options\n    --minimal             produce the smallest possible diff\n    -w, --ignore-all-space\n                          ignore whitespace when comparing lines\n    -b, --ignore-space-change\n                          ignore changes in amount of whitespace\n    --ignore-space-at-eol ignore changes in whitespace at EOL\n    --ignore-cr-at-eol    ignore carrier-return at the end of line\n    --ignore-blank-lines  ignore changes whose lines are all blank\n    -I, --[no-]ignore-matching-lines <regex>\n                          ignore changes whose all lines match <regex>\n    --[no-]indent-heuristic\n                          heuristic to shift diff hunk boundaries for easy reading\n    --patience            generate diff using the \"patience diff\" algorithm\n    --histogram           generate diff using the \"histogram diff\" algorithm\n    --diff-algorithm <algorithm>\n                          choose a diff algorithm\n    --anchored <text>     generate diff using the \"anchored diff\" algorithm\n    --word-diff[=<mode>]  show word diff, using <mode> to delimit changed words\n    --word-diff-regex <regex>\n                          use <regex> to decide what a word is\n    --color-words[=<regex>]\n                          equivalent to --word-diff=color --word-diff-regex=<regex>\n    --[no-]color-moved[=<mode>]\n                          moved lines of code are colored differently\n    --[no-]color-moved-ws <mode>\n                          how white spaces are ignored in --color-moved\n\nOther diff options\n    --[no-]relative[=<prefix>]\n                          when run from subdir, exclude changes outside and show relative paths\n    -a, --[no-]text       treat all files as text\n    -R                    swap two inputs, reverse the diff\n    --[no-]exit-code      exit with 1 if there were differences, 0 otherwise\n    --[no-]quiet          disable all output of the program\n    --[no-]ext-diff       allow an external diff helper to be executed\n    --[no-]textconv       run external text conversion filters when comparing binary files\n    --ignore-submodules[=<when>]\n                          ignore changes to submodules in the diff generation\n    --submodule[=<format>]\n                          specify how differences in submodules are shown\n    --ita-invisible-in-index\n                          hide 'git add -N' entries from the index\n    --ita-visible-in-index\n                          treat 'git add -N' entries as real in the index\n    -S <string>           look for differences that change the number of occurrences of the specified string\n    -G <regex>            look for differences that change the number of occurrences of the specified regex\n    --pickaxe-all         show all changes in the changeset with -S or -G\n    --pickaxe-regex       treat <string> in -S as extended POSIX regular expression\n    -O <file>             control the order in which files appear in the output\n    --rotate-to <path>    show the change in the specified path first\n    --skip-to <path>      skip the output to the specified path\n    --find-object <object-id>\n                          look for differences that change the number of occurrences of the specified object\n    --diff-filter [(A|C|D|M|R|T|U|X|B)...[*]]\n                          select files by diff type\n    --output <file>       output to a specific file",
+        "unpushed": "ERROR: fatal: not a git repository (or any of the parent directories): .git",
+        "stash": "ERROR: fatal: not a git repository (or any of the parent directories): .git"
+      }
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem",
+      "exists": true,
+      "git": {
+        "root": "/Users/christerolsen/GinieSystem",
+        "branch": "master",
+        "head": "292d3fa6",
+        "status_sb": "## master...origin/master\n D HANDOVER_MAC_2026-04-06.md\n D handover.md\n m openwebui-stack",
+        "upstream": "origin/master",
+        "ahead_behind": "0\t0",
+        "diff_stat": "HANDOVER_MAC_2026-04-06.md | 226 ---------------------------------------------\n handover.md                |  91 ------------------\n openwebui-stack            |   0\n 3 files changed, 317 deletions(-)",
+        "unpushed": "",
+        "stash": "stash@{0}: On master: WIP: untracked files before rebase"
+      }
+    },
+    {
+      "path": "/Users/christerolsen/roadmap-ai",
+      "exists": true,
+      "git": {
+        "root": "/Users/christerolsen/roadmap-ai",
+        "branch": "main",
+        "head": "a0e6daa",
+        "status_sb": "## main...origin/main\n M .gitignore\n M CODEX_TASKS.md\n M package-lock.json\n M packages/operator-contracts/src/index.ts\n M packages/operator-contracts/tsconfig.tsbuildinfo\n?? .guardian_backups/\n?? .logs/\n?? exports/\n?? file_guardian.py\n?? live_file_scanner.py\n?? mission-control/\n?? quick_code_scanner.py\n?? ram_logger.py\n?? ram_monitor.py\n?? resource_monitor.py\n?? start_guardian.sh\n?? start_protection_suite.sh\n?? stresstest_guardian.py\n?? top_100_code_files.json\n?? total_missioncontrol/",
+        "upstream": "origin/main",
+        "ahead_behind": "0\t0",
+        "diff_stat": ".gitignore                                       |   33 +-\n CODEX_TASKS.md                                   |  105 +\n package-lock.json                                | 2860 +++++++++++++++++++++-\n packages/operator-contracts/src/index.ts         |    1 +\n packages/operator-contracts/tsconfig.tsbuildinfo |    2 +-\n 5 files changed, 2970 insertions(+), 31 deletions(-)",
+        "unpushed": "",
+        "stash": ""
+      }
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os",
+      "exists": true,
+      "git": {
+        "root": "/Users/christerolsen/GinieSystem/revenue_os",
+        "branch": "master",
+        "head": "f3a2de9",
+        "status_sb": "## master...origin/master\n?? dist/",
+        "upstream": "origin/master",
+        "ahead_behind": "0\t0",
+        "diff_stat": "",
+        "unpushed": "",
+        "stash": "stash@{0}: On master: triage: park untracked cli/docs/debug after verifier fix"
+      }
+    }
+  ],
+  "env_files": [
+    {
+      "path": "/Users/christerolsen/GinieSystem/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "ALL_PROXY",
+        "NO_PROXY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 6
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_userid_zshsafe_20260126_200109/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_userid_zshsafe_20260126_200109/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_logout_header_payment_20260126_194048/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_007_008_brreg_enhance_20260126_193011/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/ASK_008_parse_fix_20260126_193546/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_test_userid_20260126_195715/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE1_2_3_pdf_unlock_20260126_195229/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env.local",
+      "keys": [
+        "STRIPE_SECRET_KEY",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "NEXTAUTH_SECRET"
+      ],
+      "key_count": 4
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE2_industry_sparing_20260126_231130/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/.env",
+      "keys": [
+        "GEMINI_API_KEY",
+        "PERPLEXITY_API_KEY",
+        "OPENAI_API_KEY"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/deterministic_audit_mvp/03_Workspace/Backups/FASE_webhook_final_eof_20260126_200249/.env.example",
+      "keys": [
+        "DEFAULT_CUSTOMER_ID",
+        "ANVIL_TIER"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/openwebui-stack/stack/.env.hftoken",
+      "keys": [
+        "OLLAMA_BASE_URL",
+        "MODEL",
+        "PULL_TARGET",
+        "JETSON_SSH",
+        "WEBUI_PORT",
+        "HF_TOKEN"
+      ],
+      "key_count": 6
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/openwebui-stack/stack/.env",
+      "keys": [
+        "OLLAMA_BASE_URL",
+        "MODEL",
+        "PULL_TARGET",
+        "JETSON_SSH",
+        "WEBUI_PORT",
+        "SYMBIOSIS_REMOTE_URL",
+        "SYMBIOSIS_REMOTE_KEY",
+        "SYMBIOSIS_REMOTE_TIMEOUT_MS",
+        "ROADMAP_HOOK_URL",
+        "ROADMAP_HOOK_KEY",
+        "ROADMAP_HOOK_TIMEOUT_MS"
+      ],
+      "key_count": 11
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/openwebui-stack/vendor/open-webui/.env.example",
+      "keys": [
+        "OLLAMA_BASE_URL",
+        "OPENAI_API_BASE_URL",
+        "OPENAI_API_KEY",
+        "CORS_ALLOW_ORIGIN",
+        "FORWARDED_ALLOW_IPS",
+        "SCARF_NO_ANALYTICS",
+        "DO_NOT_TRACK",
+        "ANONYMIZED_TELEMETRY"
+      ],
+      "key_count": 8
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/web/.env.local",
+      "keys": [
+        "VITE_API_BASE"
+      ],
+      "key_count": 1
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/web/.env.example",
+      "keys": [
+        "VITE_API_BASE"
+      ],
+      "key_count": 1
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/triage/.env",
+      "keys": [
+        "BACKEND_MODE",
+        "SYSTEMD_SERVICES",
+        "DOCKER_COMPOSE_FILE",
+        "DOCKER_COMPOSE_PROJECT",
+        "K8S_NAMESPACE",
+        "K8S_DEPLOYMENTS",
+        "K8S_HEALTH_URL",
+        "BIOCORE_HEALTH_URL",
+        "AUDITCHAIN_HEALTH_URL",
+        "NF47_MODE",
+        "NF47_NODE",
+        "NF47_DRAIN_TIMEOUT",
+        "LOG_DIR"
+      ],
+      "key_count": 13
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/IfTTT-Webhook-Bridge/.env",
+      "keys": [
+        "GINIE_IFTTT_WEBHOOK_SECRET",
+        "GINIE_PUBLIC_BASE_URL",
+        "GINIE_ENV"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/IfTTT-Webhook-Bridge/.env.example",
+      "keys": [
+        "GINIE_IFTTT_WEBHOOK_SECRET",
+        "GINIE_PUBLIC_BASE_URL",
+        "GINIE_ENV"
+      ],
+      "key_count": 3
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/NotionToolkit/.env",
+      "keys": [
+        "NOTION_TOKEN",
+        "NOTION_TASK_DB_ID"
+      ],
+      "key_count": 2
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os/.env",
+      "keys": [
+        "DATABASE_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "PORT"
+      ],
+      "key_count": 4
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os/.env.example",
+      "keys": [
+        "DATABASE_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "CORS_ORIGIN",
+        "NODE_ENV",
+        "PORT"
+      ],
+      "key_count": 6
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os/04_Frontend/ask-control-panel/.env.local",
+      "keys": [
+        "NEXT_PUBLIC_API_BASE"
+      ],
+      "key_count": 1
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os/04_Frontend/ask-control-panel/.env.example",
+      "keys": [
+        "NEXT_PUBLIC_API_BASE"
+      ],
+      "key_count": 1
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os/02_Backend/ask-control-api/.env.local",
+      "keys": [
+        "PORT",
+        "AUDIT_LOG_PATH",
+        "RAG_ANSWER_SCRIPT",
+        "ALLOWED_ORIGINS"
+      ],
+      "key_count": 4
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/revenue_os/02_Backend/ask-control-api/.env.example",
+      "keys": [
+        "PORT",
+        "AUDIT_LOG_PATH",
+        "RAG_ANSWER_SCRIPT",
+        "ALLOWED_ORIGINS"
+      ],
+      "key_count": 4
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/modules/symbiotic/.env.template",
+      "keys": [
+        "OPENAI_API_KEY",
+        "GUMROAD_API_KEY",
+        "STRIPE_API_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "CONVERTKIT_API_KEY",
+        "TELEGRAM_BOT_TOKEN",
+        "TELEGRAM_CHAT_ID",
+        "DASHBOARD_PASSWORD",
+        "DASHBOARD_SECRET_KEY"
+      ],
+      "key_count": 9
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem/LEVIATHAN_V3_REAL/.env",
+      "keys": [
+        "SERPAPI_KEY",
+        "GEMINI_API_KEY",
+        "TELEGRAM_TOKEN",
+        "TELEGRAM_CHAT_ID",
+        "YOUTUBE_API_KEY",
+        "TZ",
+        "LEV_STATE_PATH",
+        "LEV_LOG_PATH",
+        "LEV_RUN_EVERY_HOURS"
+      ],
+      "key_count": 9
+    },
+    {
+      "path": "/Users/christerolsen/roadmap-ai/.env.example",
+      "keys": [
+        "DATABASE_URL",
+        "NEXTAUTH_URL",
+        "NEXTAUTH_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "RESEND_API_KEY",
+        "EMAIL_FROM",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_PUBLISHABLE_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "STRIPE_SECRET_KEY_TEST",
+        "STRIPE_PUBLISHABLE_KEY_TEST",
+        "STRIPE_WEBHOOK_SECRET_TEST",
+        "RAILWAY_API_TOKEN",
+        "RAILWAY_PROJECT_ID",
+        "FLOWARK_SOLO_URL",
+        "REVENUE_OS_URL"
+      ],
+      "key_count": 17
+    },
+    {
+      "path": "/Users/christerolsen/roadmap-ai/services/echobot-py/.env.example",
+      "keys": [
+        "OPENAI_API_KEY",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "FIRECRAWL_API_KEY",
+        "APOLLO_API_KEY",
+        "GRAYHAT_API_KEY",
+        "SENDGRID_API_KEY",
+        "N8N_WEBHOOK_URL"
+      ],
+      "key_count": 8
+    }
+  ],
+  "ports": [
+    "rapportd|404|*:49209",
+    "rapportd|404|*:49209",
+    "sharingd|462|*:8771",
+    "sharingd|462|*:8771",
+    "ARDAgent|536|*:3283",
+    "Python|568|127.0.0.1:49296",
+    "ControlCe|571|*:7000",
+    "ControlCe|571|*:7000",
+    "ControlCe|571|*:5000",
+    "ControlCe|571|*:5000",
+    "postgres|1751|[::1]:5432",
+    "postgres|1751|127.0.0.1:5432",
+    "com.docke|1868|127.0.0.1:49412",
+    "com.docke|1868|127.0.0.1:6443",
+    "com.docke|1868|*:3001",
+    "com.docke|1868|*:3000",
+    "com.docke|1868|*:9099",
+    "mariadbd|1918|*:3306",
+    "mariadbd|1918|*:3306",
+    "node|2146|127.0.0.1:18789",
+    "node|2146|[::1]:18789",
+    "node|2146|127.0.0.1:18791",
+    "node|2146|127.0.0.1:18792",
+    "Python|3049|*:8888",
+    "Python|4578|*:9191",
+    "python3.1|64420|*:8100",
+    "Ollama|86851|127.0.0.1:49725",
+    "ollama|86855|*:11434",
+    "Python|94948|127.0.0.1:8000"
+  ],
+  "docker": [
+    "open-webui-pipelines|ghcr.io/open-webui/pipelines:main|Up 2 days|0.0.0.0:9099->9099/tcp, [::]:9099->9099/tcp",
+    "open-webui|ghcr.io/open-webui/open-webui:main|Up 3 days (healthy)|0.0.0.0:3001->8080/tcp, [::]:3001->8080/tcp",
+    "open-webui-watchtower|containrrr/watchtower:latest|Restarting (1) Less than a second ago|",
+    "aimigo-integrations-ops-ui-1|aimigo-integrations-ops-ui|Up 3 days|0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp",
+    "aimigo-integrations-scheduler-1|aimigo-integrations-scheduler|Up 3 days|"
+  ],
+  "processes": [
+    "568 /usr/local/Cella /usr/local/Cellar/python@3.13/3.13.7/IDLE 3.app/Contents/MacOS/IDLE /usr/local/Cellar/python@3.13/3.13.7/IDLE 3.app/Contents/Resources/idlemain.py",
+    "  977 /usr/local/Cella /usr/local/Cellar/python@3.13/3.13.11_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c __import__('idlelib.run').run.main(True) 49296",
+    " 1752 /usr/local/Cella /usr/local/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Users/christerolsen/.aimigo/daemon.py",
+    " 1760 /usr/local/Cella /usr/local/Cellar/python@3.13/3.13.11_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m nanotech_revenue_suite.event_runner",
+    "11464 /usr/local/Cella /usr/local/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python -m cloudbot.main",
+    "86851 /Applications/Ol /Applications/Ollama.app/Contents/MacOS/Ollama hidden",
+    "86855 /Applications/Ol /Applications/Ollama.app/Contents/Resources/ollama serve",
+    "94948 /usr/local/Cella /usr/local/Cellar/python@3.13/3.13.11_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m uvicorn nanotech_revenue_suite.api.main:app --host 127.0.0.1 --port 8000",
+    "73919 ssh              ssh aimigo@100.97.199.60",
+    "27899 dns-sd           dns-sd -G v4 aimigo.local",
+    "64402 uv               uv run python -m backend.main",
+    "64420 /Users/christero /Users/christerolsen/GinieSystem/LLMCouncil/app/.venv/bin/python -m backend.main",
+    " 3049 /usr/local/Cella /usr/local/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python total_missioncontrol/backend/api_server.py --port 8888",
+    "23972 ssh              ssh aimigo@100.97.199.60",
+    "74607 ssh              ssh aimigo@100.97.199.60",
+    "92371 ssh              ssh aimigo@100.97.199.60",
+    " 4578 /usr/local/Cella /usr/local/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Users/christerolsen/roadmap-ai/tools/symbiosis_hook_server.py",
+    "81775 ssh              ssh aimigo@100.97.199.60",
+    "96521 ssh              ssh aimigo@100.97.199.60",
+    "48102 /bin/bash        /bin/bash -c pkill -9 -f \"file_guardian.py\" 2>/dev/null; sleep 1; cd /Users/christerolsen/roadmap-ai && source venv/bin/activate && python3 file_guardian.py giniesystem_commercial_stack.py &\\012sleep 2\\012echo \"\"\\012echo \"✅ Guardian startet på nytt!\"\\012ps aux | grep -v grep | grep \"file_guardian.py giniesystem\"",
+    "48106 /usr/local/Cella /usr/local/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python file_guardian.py giniesystem_commercial_stack.py",
+    " 4887 ssh              ssh aimigo@100.97.199.60",
+    "54920 ssh              ssh aimigo@100.97.199.60",
+    "  889 ssh              ssh aimigo@100.97.199.60",
+    "10575 ssh              ssh aimigo@100.97.199.60",
+    "51498 ssh              ssh aimigo@100.97.199.60",
+    "54648 ssh              ssh aimigo@100.97.199.60",
+    "81927 /usr/local/Cella /usr/local/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Users/christerolsen/mission-control/scripts/mc_inventory_01.py"
+  ],
+  "agents": [
+    {
+      "path": "/Users/christerolsen/mission-control/scripts/mc_aimigo_cockpit.sh",
+      "exists": false
+    },
+    {
+      "path": "/Users/christerolsen/mission-control/api/aimigo_proxy.js",
+      "exists": false
+    },
+    {
+      "path": "/Users/christerolsen/mission-control/dashboard/aimigo-cockpit",
+      "exists": false
+    },
+    {
+      "path": "/Users/christerolsen/GinieSystem",
+      "exists": true
+    }
+  ],
+  "unknowns": [
+    "Jetson inventar ikke kjørt ennå",
+    "Kostnader/subscriptions ikke inventert ennå",
+    "Nettverkskart ikke ferdig",
+    "Kommersiell offer må produktiseres"
+  ]
+}

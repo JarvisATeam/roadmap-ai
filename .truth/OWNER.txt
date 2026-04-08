@@ -1,0 +1,5 @@
+REPO_OWNER=/Users/christerolsen/roadmap-ai
+ACTIVE_COCKPIT_SUBTREE=/Users/christerolsen/roadmap-ai/total_missioncontrol
+SIDECAR_SUBTREE=/Users/christerolsen/roadmap-ai/mission-control
+JETSON_DEPLOY=/home/aimigo/mission-control/total-missioncontrol
+MIGRATED_AT=20260408_162741

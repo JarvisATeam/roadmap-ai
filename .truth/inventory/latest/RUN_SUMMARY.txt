@@ -1,0 +1,6 @@
+TRUTH_SOURCE=/Users/christerolsen/mission-control/.truth/TRUTH_SOURCE.md
+INVENTORY_JSON=/Users/christerolsen/mission-control/.truth/inventory/latest/inventory.json
+TIMESTAMPED_JSON=/Users/christerolsen/mission-control/.truth/inventory/logs/inventory_20260408_160500.json
+REPO_COUNT=4
+ENV_FILE_COUNT=38
+AGENT_COUNT=4
